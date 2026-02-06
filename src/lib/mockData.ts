@@ -51,3 +51,11 @@ export const mockPosts = [
     chars: 178,
   },
 ];
+
+export const mockTrending = [
+  { id: 1, topic: "Claude 4.5 Release", posts: "12.4K", trend: "up" as const },
+  { id: 2, topic: "AI Regulation EU", posts: "8.7K", trend: "up" as const },
+  { id: 3, topic: "GPT-5 Benchmarks", posts: "6.2K", trend: "down" as const },
+  { id: 4, topic: "Open Source LLMs", posts: "5.1K", trend: "up" as const },
+  { id: 5, topic: "AI in Healthcare", posts: "3.8K", trend: "up" as const },
+];

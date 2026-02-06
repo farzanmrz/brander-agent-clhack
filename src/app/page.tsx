@@ -5,24 +5,23 @@ import { Bird } from "lucide-react";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="fixed top-0 left-0 right-0 px-6 py-6">
-        <div className="flex items-center gap-2">
-          <Bird className="w-5 h-5 text-green-600" />
-          <span className="font-semibold text-lg text-gray-900">Chirp</span>
-        </div>
-      </div>
-
+    <div className="min-h-screen flex flex-col bg-white">
       <main className="flex-1 flex items-center justify-center px-6">
-        <div className="text-center max-w-3xl">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
-            Your AI-powered voice on X
+        <div className="text-center max-w-md animate-fade-in-up">
+          <Bird className="w-10 h-10 text-green-600 mx-auto mb-8" />
+
+          <h1 className="text-3xl font-bold text-gray-900 mb-3 tracking-tight">
+            See what&apos;s happening, post what matters.
           </h1>
-          <p className="text-xl text-gray-600 mb-12 max-w-2xl mx-auto">
-            Tell us what you want to talk about. We&apos;ll find the stories and
-            craft the posts.
+          <p className="text-base text-gray-500 mb-10 leading-relaxed">
+            Chirp finds trending stories and crafts posts for your X account. You pick the angle.
           </p>
+
           <GoogleSignIn />
+
+          <p className="text-xs text-gray-400 mt-6">
+            By signing in, you agree to the Terms of Service and Privacy Policy.
+          </p>
         </div>
       </main>
     </div>
