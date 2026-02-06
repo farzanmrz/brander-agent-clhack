@@ -1,0 +1,17 @@
+# Next.js dev server on port 3001. Use with docker-compose next to backend.
+FROM node:20-alpine
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+COPY next.config.ts tsconfig.json postcss.config.mjs eslint.config.mjs ./
+COPY src ./src
+COPY public ./public
+
+EXPOSE 3001
+
+# Listen on all interfaces so the dev server is reachable from host
+ENV HOSTNAME=0.0.0.0
+CMD ["npm", "run", "dev"]
