@@ -1,5 +1,5 @@
 """
-FastAPI app: API only. Frontend is deployed separately and calls this backend.
+FastAPI app: serves API at /api/* and frontend static files at / (single Render instance).
 """
 from pathlib import Path
 
@@ -9,6 +9,7 @@ load_dotenv(Path(__file__).resolve().parent / ".env")
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(title="BranderAgent")
 
@@ -26,12 +27,7 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/")
-def root():
-    return {"message": "BranderAgent API", "docs": "/docs", "health": "/api/health"}
-
-
-# --- Include routers ---
+# API routes first so /api/* takes precedence
 from backend.routers.search import router as search_router
 from backend.routers.sphere import router as sphere_router
 from backend.routers.tweet import router as tweet_router
@@ -39,3 +35,8 @@ from backend.routers.tweet import router as tweet_router
 app.include_router(search_router)
 app.include_router(sphere_router)
 app.include_router(tweet_router)
+
+# Frontend: serve static export (after API so /api is not overridden)
+out_dir = Path(__file__).resolve().parent / "out"
+if out_dir.exists():
+    app.mount("/", StaticFiles(directory=str(out_dir), html=True), name="frontend")
