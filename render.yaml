@@ -1,4 +1,4 @@
-# Render blueprint: one web service built from Dockerfile (backend on $PORT, optional static in ./static)
+# Render blueprint: backend API only (frontend deployed separately)
 services:
   - type: web
     name: brander-agent
