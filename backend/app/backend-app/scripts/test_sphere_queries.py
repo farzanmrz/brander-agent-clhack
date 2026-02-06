@@ -3,17 +3,17 @@
 Test script for sphere query generation.
 
 Usage:
-    python app/scripts/test_sphere_queries.py
-    python app/scripts/test_sphere_queries.py "Your custom sphere description here"
+    python backend/scripts/test_sphere_queries.py
+    python backend/scripts/test_sphere_queries.py "Your custom sphere description here"
 """
 
 import sys
 import os
 
-# Add parent directory to path to import app modules
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
+# Add project root to path to import backend modules
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../../..')))
 
-from app.services.gemini_service import generate_sphere_queries
+from backend.services.gemini_service import generate_sphere_queries
 
 
 def main():

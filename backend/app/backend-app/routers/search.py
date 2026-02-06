@@ -4,7 +4,7 @@ Search routes — thin wrappers around ydc_service.
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel
 
-from app.services.ydc_service import search_web, search_web_slim, search_and_fetch
+from backend.services.ydc_service import search_web, search_web_slim, search_and_fetch
 
 router = APIRouter(prefix="/api/search", tags=["search"])
 

@@ -4,10 +4,16 @@ import Header from "@/components/Header";
 import LoadingState from "@/components/LoadingState";
 import TopicCard from "@/components/TopicCard";
 import Button from "@/components/ui/Button";
-import { mockTopics } from "@/lib/mockData";
 import { ArrowLeft } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useCallback, useEffect, useState } from "react";
+
+interface SphereTopic {
+  id: number;
+  icon: string;
+  title: string;
+  description: string;
+}
 
 function TopicsContent() {
   const router = useRouter();
@@ -15,11 +21,47 @@ function TopicsContent() {
   const query = searchParams.get("query") || "";
   const [selected, setSelected] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
+  const [topics, setTopics] = useState<SphereTopic[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchTopics = useCallback(async () => {
+    if (!query.trim()) {
+      setLoading(false);
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch("/api/sphere/queries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ description: query.trim() }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || `Request failed: ${res.status}`);
+      }
+      const data = await res.json();
+      const mapped: SphereTopic[] = (data.queries || []).map(
+        (q: string, i: number) => ({
+          id: i + 1,
+          icon: "🔍",
+          title: q,
+          description: "Search angle for finding relevant content",
+        })
+      );
+      setTopics(mapped);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to fetch topics");
+      setTopics([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [query]);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
-  }, []);
+    fetchTopics();
+  }, [fetchTopics]);
 
   const toggleTopic = (id: number) => {
     setSelected((prev) =>
@@ -52,10 +94,23 @@ function TopicsContent() {
         </p>
 
         {loading ? (
-          <LoadingState message="Finding articles..." />
+          <LoadingState message="Finding topics..." />
+        ) : error ? (
+          <div className="rounded-lg border-2 border-red-200 bg-red-50 p-6 text-red-700">
+            <p className="font-semibold mb-2">Could not load topics</p>
+            <p className="text-sm mb-4">{error}</p>
+            <Button onClick={fetchTopics} size="sm">
+              Retry
+            </Button>
+          </div>
+        ) : topics.length === 0 ? (
+          <p className="text-gray-500">
+            No topics found. Try a different search or go back to refine your
+            description.
+          </p>
         ) : (
           <div className="grid md:grid-cols-2 gap-4">
-            {mockTopics.map((topic) => (
+            {topics.map((topic) => (
               <TopicCard
                 key={topic.id}
                 icon={topic.icon}
@@ -69,7 +124,7 @@ function TopicsContent() {
         )}
       </main>
 
-      {!loading && (
+      {!loading && topics.length > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-200 p-4">
           <div className="max-w-5xl mx-auto">
             <Button

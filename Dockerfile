@@ -7,7 +7,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY main.py .
-COPY app ./app
+COPY backend ./backend
 # Pre-built frontend: add static/ to build context (e.g. from frontend/build) before docker build
 COPY static ./static
 
