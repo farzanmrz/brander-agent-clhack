@@ -6,18 +6,26 @@ and to draft tweets based on researched content.
 """
 
 import os
-import json
 from typing import List
+from pydantic import BaseModel
 from google import genai
+from google.genai import types
 from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
 
 
+class SphereQueries(BaseModel):
+    """Structured output model for sphere queries."""
+    queries: List[str]
+
+
 def generate_sphere_queries(description: str) -> List[str]:
     """
     Generate 5 distinct, varied search queries from a sphere description.
+    
+    Uses Gemini's structured output feature to guarantee valid, type-safe responses.
     
     Args:
         description: Free-text description of what the user wants to post about
@@ -51,30 +59,18 @@ Requirements for the queries:
 4. Vary the types of content searched: tools, guides, comparisons, best practices, news, trends, etc.
 5. Be specific enough to return high-quality results, not too vague
 
-Return ONLY a JSON array of 5 strings (the queries), nothing else. No explanations, no markdown formatting, just the raw JSON array.
-
-Example format:
-["query 1 here", "query 2 here", "query 3 here", "query 4 here", "query 5 here"]"""
+Return exactly 5 queries as a JSON object with a "queries" array."""
     
-    # Call Gemini API
+    # Call Gemini API with structured output
     response = client.models.generate_content(
         model='gemini-3-pro-preview',
-        contents=prompt
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            response_mime_type='application/json',
+            response_schema=SphereQueries
+        )
     )
     
-    # Parse the response
-    response_text = response.text.strip()
-    
-    # Remove markdown code blocks if present
-    if response_text.startswith("```"):
-        lines = response_text.split("\n")
-        response_text = "\n".join(lines[1:-1])
-    
-    # Parse JSON
-    try:
-        queries = json.loads(response_text)
-        if not isinstance(queries, list) or len(queries) != 5:
-            raise ValueError(f"Expected a list of 5 queries, got: {queries}")
-        return queries
-    except json.JSONDecodeError as e:
-        raise ValueError(f"Failed to parse Gemini response as JSON: {response_text}") from e
+    # Parse structured response
+    result = SphereQueries.model_validate_json(response.text)
+    return result.queries

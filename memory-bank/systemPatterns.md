@@ -16,9 +16,26 @@
 ## API Integration Patterns
 1. **You.com:** Used for `Search API` and `Live News API`. Each of 5 queries per sphere runs through both APIs, returning ~10 results per query. Structured results (title, snippet, URL) are displayed to user and selected results are passed to Gemini.
 2. **Composio:** Used for `TWITTER_CREATION_OF_A_POST` and `TWITTER_USER_LOOKUP_ME` (OAuth). Handled via direct function calls from the Composio Python SDK.
-3. **Google Gemini:** `google-genai` package. Used for:
+3. **Google Gemini:** `google-genai` package (model: `gemini-3-pro`). Used for:
    - Query generation: Takes sphere free-text description → generates 5 focused search queries
    - Tweet drafting: Takes selected You.com results + sphere context + past feedback → drafts original tweets
+   
+   **Implementation Pattern:**
+   ```python
+   from google import genai
+   from dotenv import load_dotenv
+   import os
+   
+   load_dotenv()
+   client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
+   response = client.models.generate_content(
+       model='gemini-3-pro',
+       contents='prompt here'
+   )
+   result = response.text
+   ```
+   
+   JSON responses are parsed after removing markdown code blocks if present.
 
 ## Feedback Loop Design
 All feedback is stored in SQLite per sphere and fed into future Gemini prompts:

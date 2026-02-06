@@ -17,8 +17,10 @@ def health():
 
 # --- Include routers (add-only, no merge conflicts) ---
 from app.routers.search import router as search_router
-app.include_router(search_router)
+from app.routers.sphere import router as sphere_router
 from app.routers.tweet import router as tweet_router
+app.include_router(search_router)
+app.include_router(sphere_router)
 app.include_router(tweet_router)
 
 # Serve React build when present; SPA fallback for client-side routing

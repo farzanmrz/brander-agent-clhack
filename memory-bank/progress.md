@@ -1,8 +1,8 @@
 # Progress: BranderAgent
 
-## Project Status: Environment Setup Complete
+## Project Status: Sphere Query Generation Complete
 Phase 1: Setup & Initialization (Complete ✓)
-Phase 2: Core Implementation (Ready to Begin)
+Phase 2: Core Implementation (In Progress - 1/14 features complete)
 
 ## Completed Milestones
 - [x] Create project directory and initialize git repo
@@ -15,19 +15,24 @@ Phase 2: Core Implementation (Ready to Begin)
 - [x] Install all required packages (fastapi, uvicorn, google-genai, composio-core, youdotcom, python-dotenv, jinja2, aiohttp)
 - [x] Generate `environment.yml` for reproducibility
 - [x] Commit and push environment setup (commit `9bfc091`)
+- [x] **Feature: Sphere Query Generation (commit `8d2b6f0`)**
+  - [x] Create `.env.example` template for API keys
+  - [x] Implement `app/services/gemini_service.py` with `generate_sphere_queries()`
+  - [x] Create test script `app/scripts/test_sphere_queries.py`
+  - [x] Configure Gemini API with `gemini-3-pro` model
+  - [x] Test and verify end-to-end functionality
+  - [x] Merge `ft/sphere-setup` into main
 
 ## Current Task
-- [ ] Create `.env.example` template for API keys
-- [ ] Update README.md to reflect revised project flow
+- [ ] Integrate You.com APIs (Search + Live News)
 
 ## Upcoming Tasks (Priority Order - Revised Flow)
+- [ ] You.com Integration (Search + Live News APIs) - 5 queries × ~10 results each
 - [ ] Initialize FastAPI app and folder structure (main.py, routers, models)
 - [ ] Database schema definition (SQLite) - spheres, queries, sources, drafts, feedback
 - [ ] Twitter OAuth implementation via Composio
 - [ ] Sphere creation endpoint (free-text description input)
-- [ ] Gemini query generation (5 queries from sphere description)
 - [ ] Query review UI (display + optional editing)
-- [ ] You.com Integration (Search + Live News APIs) - 5 queries × ~10 results each
 - [ ] Source selection UI (checklist of results grouped by query)
 - [ ] Gemini tweet drafting (based on selected sources + feedback)
 - [ ] Draft review UI (approve/edit/reject)
@@ -39,8 +44,7 @@ Phase 2: Core Implementation (Ready to Begin)
 - [ ] Reply-to-tweets feature (search for existing tweets to reply to)
 
 ## Known Issues & Constraints
-- No code written yet (initial setup and planning phase).
-- Limited time (5.5 hours from 11 AM PT).
-- Team of 4 developers, need to coordinate work.
+- Current time: 11:34 AM PT (~4 hours remaining until 4:30 PM cutoff).
+- Team of 4 developers, need to coordinate work distribution.
 - MVP UI: Keep query editing and source filtering simple (checklists, text inputs).
-- Major flow revision: Now creating original tweets from researched content, not replying to existing tweets.
+- Sphere query generation complete; next priority is You.com integration.
