@@ -1,6 +1,7 @@
 "use client";
 
-import { Bird, ChevronDown, LogOut, Settings, Zap } from "lucide-react";
+import { ChevronDown, LogOut, Settings, Zap } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -71,10 +72,7 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
           <div className="flex items-center gap-4">
             <Link href="/dashboard" className="flex items-center gap-2">
-              <div className="bg-lime neo-border rounded-lg p-1">
-                <Bird className="w-5 h-5 text-black" />
-              </div>
-              <span className="font-bold text-xl text-black">Chirp</span>
+              <Image src="/ditto-logo.svg" alt="Ditto" width={100} height={34} />
             </Link>
 
             {/* YOLO toggle */}
@@ -91,19 +89,6 @@ export default function Header() {
                 strokeWidth={3}
                 fill={yolo ? "currentColor" : "none"}
               />
-              <div className="absolute right-0 mt-2 w-48 bg-white neo-border neo-shadow rounded-lg py-2 z-50">
-                <button className="w-full px-4 py-2.5 text-left text-sm font-semibold text-black hover:bg-purple-light flex items-center gap-2 transition-colors">
-                  <Settings className="w-4 h-4" />
-                  Settings
-                </button>
-                <Link
-                  href="/"
-                  className="w-full px-4 py-2.5 text-left text-sm font-semibold text-black hover:bg-purple-light flex items-center gap-2 transition-colors"
-                >
-                  <LogOut className="w-4 h-4" />
-                  Sign out
-                </Link>
-              YOLO
             </button>
           </div>
           <div className="relative">
