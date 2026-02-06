@@ -9,6 +9,8 @@ from backend.services.gemini_service import (
     generate_sphere_queries,
     generate_tweets_from_queries,
     generate_styled_tweets,
+    rewrite_tweet,
+    add_brand_rule,
     QueryContent,
     TweetGenerationResponse,
     StyledTweetsResponse,
@@ -106,4 +108,36 @@ def generate_styled(request: TweetGenerationRequest):
         raise HTTPException(
             status_code=500,
             detail=f"Failed to generate styled tweets: {str(e)}"
+        )
+
+
+class RewriteRequest(BaseModel):
+    """Request model for tweet rewrite with feedback."""
+    original_tweet: str
+    feedback: str
+    tone: str
+
+
+@router.post("/rewrite-tweet")
+def rewrite_tweet_endpoint(request: RewriteRequest):
+    """
+    Rewrite a tweet based on user feedback.
+    Also derives a new brand guideline rule and saves it.
+    """
+    try:
+        result = rewrite_tweet(
+            original_tweet=request.original_tweet,
+            feedback=request.feedback,
+            tone=request.tone,
+        )
+        # Persist the new rule to brand_guidelines.json
+        add_brand_rule(result.new_rule)
+        return {
+            "rewritten_tweet": result.rewritten_tweet,
+            "new_rule": result.new_rule,
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to rewrite tweet: {str(e)}"
         )

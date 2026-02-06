@@ -3,7 +3,7 @@
 import Header from "@/components/Header";
 import LoadingState from "@/components/LoadingState";
 import Button from "@/components/ui/Button";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 
@@ -20,6 +20,12 @@ function PreviewContent() {
   const [posted, setPosted] = useState(false);
   const [tweetUrl, setTweetUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+
+  // Edit/feedback state
+  const [editing, setEditing] = useState(false);
+  const [feedback, setFeedback] = useState("");
+  const [rewriting, setRewriting] = useState(false);
+  const [newRule, setNewRule] = useState<string | null>(null);
 
   useEffect(() => {
     const raw = sessionStorage.getItem("brander_preview");
@@ -46,10 +52,13 @@ function PreviewContent() {
     );
   }
 
-  const formattedText = post.text.replace(
-    /(https?:\/\/[^\s]+)/g,
-    '<a href="#" class="text-black underline decoration-2 underline-offset-2 font-bold">$1</a>'
-  );
+  const formatTweet = (text: string) =>
+    text
+      .replace(
+        /(https?:\/\/[^\s]+)/g,
+        '<a href="#" class="text-black underline decoration-2 underline-offset-2 font-bold">$1</a>'
+      )
+      .replace(/\n/g, "<br />");
 
   const handlePost = async () => {
     setPosting(true);
@@ -65,7 +74,6 @@ function PreviewContent() {
         throw new Error(data.detail || `Post failed: ${res.status}`);
       }
       const data = await res.json();
-      // Extract tweet ID from Composio response
       const tweetId = data?.result?.data?.data?.id;
       if (tweetId) {
         setTweetUrl(`https://x.com/i/status/${tweetId}`);
@@ -75,6 +83,43 @@ function PreviewContent() {
       setError(err instanceof Error ? err.message : "Failed to post");
     } finally {
       setPosting(false);
+    }
+  };
+
+  const handleRewrite = async () => {
+    if (!feedback.trim()) return;
+    setRewriting(true);
+    setError(null);
+    setNewRule(null);
+    try {
+      const res = await fetch("/api/sphere/rewrite-tweet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          original_tweet: post.text,
+          feedback: feedback.trim(),
+          tone: post.angle,
+        }),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.detail || `Rewrite failed: ${res.status}`);
+      }
+      const data = await res.json();
+      const updated: PreviewPost = {
+        text: data.rewritten_tweet,
+        angle: post.angle,
+        chars: data.rewritten_tweet.length,
+      };
+      setPost(updated);
+      sessionStorage.setItem("brander_preview", JSON.stringify(updated));
+      setNewRule(data.new_rule);
+      setEditing(false);
+      setFeedback("");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Rewrite failed");
+    } finally {
+      setRewriting(false);
     }
   };
 
@@ -125,7 +170,7 @@ function PreviewContent() {
         <div className="bg-white neo-border neo-shadow p-6 rounded-lg">
           <p
             className="text-base leading-relaxed text-black"
-            dangerouslySetInnerHTML={{ __html: formattedText }}
+            dangerouslySetInnerHTML={{ __html: formatTweet(post.text) }}
           />
         </div>
 
@@ -135,6 +180,59 @@ function PreviewContent() {
           </span>
         </div>
 
+        {/* New rule banner */}
+        {newRule && (
+          <div className="mt-4 bg-sky neo-border neo-shadow-sm rounded-lg p-4 flex items-start gap-3">
+            <Sparkles
+              className="w-5 h-5 text-black shrink-0 mt-0.5"
+              strokeWidth={2.5}
+            />
+            <div>
+              <p className="text-sm font-bold text-black mb-1">
+                Brand guideline updated
+              </p>
+              <p className="text-sm text-black">
+                New rule: &ldquo;{newRule}&rdquo;
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Edit feedback form */}
+        {editing && (
+          <div className="mt-6 bg-white neo-border neo-shadow p-5 rounded-lg">
+            <p className="text-sm font-bold text-black mb-3">
+              What&apos;s wrong with this tweet?
+            </p>
+            <textarea
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+              placeholder="e.g., too formal, no hashtags, make it spicier..."
+              className="w-full neo-border neo-shadow-sm rounded-lg p-3 text-sm mb-3 h-24 resize-none outline-none focus:shadow-[3px_3px_0px_var(--color-lime)] transition-all duration-100 bg-white"
+            />
+            <div className="flex gap-3">
+              <Button
+                onClick={handleRewrite}
+                disabled={!feedback.trim() || rewriting}
+                size="sm"
+              >
+                {rewriting ? "Rewriting..." : "Rewrite Tweet"}
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  setEditing(false);
+                  setFeedback("");
+                }}
+                disabled={rewriting}
+              >
+                Cancel
+              </Button>
+            </div>
+          </div>
+        )}
+
         {error && (
           <div className="rounded-lg neo-border bg-pink p-4 text-black mt-4">
             <p className="text-sm font-bold">{error}</p>
@@ -142,16 +240,22 @@ function PreviewContent() {
         )}
 
         <div className="flex gap-4 mt-8">
-          <Button onClick={handlePost} disabled={posting} className="flex-1">
+          <Button
+            onClick={handlePost}
+            disabled={posting || editing}
+            className="flex-1"
+          >
             {posting ? "Posting..." : "Post Now"}
           </Button>
-          <Button
-            variant="secondary"
-            onClick={() => router.back()}
-            disabled={posting}
-          >
-            Edit
-          </Button>
+          {!editing && (
+            <Button
+              variant="secondary"
+              onClick={() => setEditing(true)}
+              disabled={posting}
+            >
+              Edit
+            </Button>
+          )}
         </div>
       </main>
     </div>

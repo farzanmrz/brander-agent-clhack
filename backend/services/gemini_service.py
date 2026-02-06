@@ -102,6 +102,12 @@ class StyledTweetsResponse(BaseModel):
     tweets: List[StyledTweet]
 
 
+class RewriteResult(BaseModel):
+    """Result of rewriting a tweet based on feedback."""
+    rewritten_tweet: str
+    new_rule: str
+
+
 def generate_sphere_queries(description: str) -> List[str]:
     """
     Generate 5 distinct, varied search queries from a sphere description.
@@ -319,3 +325,68 @@ Return as JSON with a "tweets" array where each item has "tone" (exactly one of:
     
     result = StyledTweetsResponse.model_validate_json(response.text)
     return result
+
+
+def rewrite_tweet(original_tweet: str, feedback: str, tone: str) -> RewriteResult:
+    """
+    Rewrite a tweet based on user feedback, then derive a new brand guideline rule.
+
+    Args:
+        original_tweet: The tweet the user didn't like
+        feedback: Why the user didn't like it
+        tone: The tone of the original tweet
+
+    Returns:
+        RewriteResult with the rewritten tweet and the new rule added
+    """
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        raise ValueError("GOOGLE_API_KEY not found in environment variables")
+
+    client = genai.Client(api_key=api_key)
+    brand_guidelines = _load_brand_guidelines()
+
+    prompt = f"""<BRAND GUIDELINES>
+{brand_guidelines}
+</BRAND GUIDELINES>
+
+<ORIGINAL TWEET>
+{original_tweet}
+</ORIGINAL TWEET>
+
+<USER FEEDBACK>
+The user said this tweet is not good because: "{feedback}"
+</USER FEEDBACK>
+
+You have two tasks:
+
+1. **Rewrite the tweet** — fix the issues the user raised while keeping the same topic and "{tone}" tone. Follow all existing brand guidelines. Max 280 characters. When you use ">" as a narrative beat, put it on a new line.
+
+2. **Derive a new brand voice rule** — based on the user's feedback, create ONE concise rule (under 15 words) that captures what the user wants. This rule will be permanently added to the brand guidelines so future tweets avoid the same issue.
+
+Return as JSON with "rewritten_tweet" and "new_rule" fields."""
+
+    response = client.models.generate_content(
+        model='gemini-3-pro-preview',
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            response_mime_type='application/json',
+            response_schema=RewriteResult
+        )
+    )
+
+    result = RewriteResult.model_validate_json(response.text)
+    return result
+
+
+def add_brand_rule(new_rule: str) -> None:
+    """Append a new rule to the voice.rules array in brand_guidelines.json."""
+    with open(BRAND_GUIDELINES_PATH, "r") as f:
+        guidelines = json.load(f)
+
+    if new_rule not in guidelines["voice"]["rules"]:
+        guidelines["voice"]["rules"].append(new_rule)
+
+    with open(BRAND_GUIDELINES_PATH, "w") as f:
+        json.dump(guidelines, f, indent=2)
+        f.write("\n")
