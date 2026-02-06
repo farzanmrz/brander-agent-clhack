@@ -31,9 +31,7 @@ export default function TopicCard({
       <div
         className={cn(
           "absolute top-4 right-4 w-7 h-7 rounded-md neo-border flex items-center justify-center transition-all duration-100",
-          selected
-            ? "bg-black"
-            : "bg-white"
+          selected ? "bg-black" : "bg-white"
         )}
       >
         {selected && <Check className="w-4 h-4 text-white" strokeWidth={3} />}

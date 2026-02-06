@@ -43,41 +43,48 @@ export default function TweetTestPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white p-8 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-2">Tweet API Test</h1>
-      <p className="text-sm text-gray-500 mb-6">
+    <div className="min-h-screen bg-cream p-8 max-w-2xl mx-auto">
+      <div className="inline-block bg-lavender neo-border neo-shadow-sm rounded-lg px-3 py-1 mb-4">
+        <span className="text-xs font-bold uppercase tracking-wide">
+          Test Page
+        </span>
+      </div>
+      <h1 className="text-3xl font-bold mb-2 text-black">Tweet API Test</h1>
+      <p className="text-sm text-gray-600 font-medium mb-6">
         POST /api/tweet — isolated test page
       </p>
 
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="w-full border-2 border-gray-300 rounded-lg p-4 text-base mb-2 h-32 resize-none focus:outline-none focus:border-green-600"
+        className="w-full neo-border neo-shadow-sm rounded-lg p-4 text-base mb-2 h-32 resize-none outline-none focus:shadow-[4px_4px_0px_var(--color-lime)] transition-all duration-100 bg-white"
       />
-      <p className="text-xs text-gray-400 mb-4">{text.length} characters</p>
+      <p className="text-xs font-bold text-gray-500 mb-4">
+        {text.length} characters
+      </p>
 
       <button
         onClick={handlePost}
         disabled={loading || !text.trim()}
-        className="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold disabled:opacity-50 cursor-pointer"
+        className="bg-lime neo-border neo-shadow text-black px-6 py-3 rounded-lg font-bold disabled:opacity-50 cursor-pointer neo-press transition-all duration-100"
       >
         {loading ? "Posting..." : "Post Tweet"}
       </button>
 
       {status && (
         <div
-          className={`mt-6 p-4 rounded-lg border-2 ${
+          className={`mt-6 p-4 rounded-lg neo-border font-bold ${
             status.startsWith("SUCCESS")
-              ? "border-green-300 bg-green-50 text-green-800"
-              : "border-red-300 bg-red-50 text-red-800"
+              ? "bg-lime text-black"
+              : "bg-pink text-black"
           }`}
         >
-          <p className="font-semibold">{status}</p>
+          <p>{status}</p>
         </div>
       )}
 
       {response && (
-        <pre className="mt-4 bg-gray-100 p-4 rounded-lg text-xs overflow-auto max-h-64">
+        <pre className="mt-4 bg-white neo-border neo-shadow-sm p-4 rounded-lg text-xs overflow-auto max-h-64 font-mono">
           {response}
         </pre>
       )}

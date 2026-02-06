@@ -6,7 +6,12 @@ import Input from "@/components/ui/Input";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-const quickStarts = ["Artificial Intelligence", "Climate Tech", "Web3", "Startups"];
+const quickStarts = [
+  "Artificial Intelligence",
+  "Climate Tech",
+  "Web3",
+  "Startups",
+];
 
 export default function DashboardPage() {
   const router = useRouter();

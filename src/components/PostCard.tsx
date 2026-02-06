@@ -39,7 +39,9 @@ export default function PostCard({
         dangerouslySetInnerHTML={{ __html: formattedText }}
       />
       <div className="flex items-center justify-between mt-auto">
-        <span className="text-xs font-semibold text-gray-600 bg-gray-100 neo-border rounded px-2 py-0.5">{chars} chars</span>
+        <span className="text-xs font-semibold text-gray-600 bg-gray-100 neo-border rounded px-2 py-0.5">
+          {chars} chars
+        </span>
         <button
           onClick={onSelect}
           className={cn(

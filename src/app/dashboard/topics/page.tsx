@@ -95,7 +95,9 @@ function TopicsContent() {
         <h1 className="text-3xl font-bold text-black mb-2">
           Pick the angles you want to explore
         </h1>
-        <p className="text-gray-600 font-medium mb-8">Results for &ldquo;{query}&rdquo;</p>
+        <p className="text-gray-600 font-medium mb-8">
+          Results for &ldquo;{query}&rdquo;
+        </p>
 
         {loading ? (
           <LoadingState message="Finding topics..." />

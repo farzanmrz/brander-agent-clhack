@@ -110,26 +110,26 @@ function PostsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-cream">
       <Header />
       <main className="max-w-6xl mx-auto px-6 pt-28 pb-12">
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-1 text-gray-600 hover:text-gray-900 mb-6 transition-all duration-150 cursor-pointer"
+          className="flex items-center gap-1 text-black font-bold mb-6 transition-all duration-100 cursor-pointer hover:underline decoration-2 underline-offset-4"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-5 h-5" strokeWidth={3} />
           <span className="text-sm">Back</span>
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+        <h1 className="text-3xl font-bold text-black mb-8">
           Choose your favorite angle
         </h1>
 
         {loading ? (
           <LoadingState message={loadingMessage} />
         ) : error ? (
-          <div className="rounded-lg border-2 border-red-200 bg-red-50 p-6 text-red-700">
-            <p className="font-semibold mb-2">Could not generate posts</p>
+          <div className="rounded-lg neo-border bg-pink p-6 text-black">
+            <p className="font-bold mb-2">Could not generate posts</p>
             <p className="text-sm mb-4">{error}</p>
             <Button onClick={() => router.back()} size="sm">
               Go Back

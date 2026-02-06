@@ -18,7 +18,9 @@ export default function LandingPage() {
       <main className="flex-1 flex items-center justify-center px-6">
         <div className="text-center max-w-3xl">
           <div className="inline-block bg-pink neo-border neo-shadow rounded-lg px-4 py-2 mb-6">
-            <span className="font-bold text-sm text-black uppercase tracking-wide">AI-Powered Posting</span>
+            <span className="font-bold text-sm text-black uppercase tracking-wide">
+              AI-Powered Posting
+            </span>
           </div>
           <h1 className="text-5xl md:text-7xl font-bold text-black mb-6 leading-tight">
             Your AI-powered voice on X

@@ -29,12 +29,14 @@ function PreviewContent() {
 
   if (!post) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-cream">
         <Header />
         <main className="max-w-2xl mx-auto px-6 pt-28 pb-12">
-          <p className="text-gray-600">
-            No post selected. Go back and pick one.
-          </p>
+          <div className="bg-white neo-border neo-shadow p-6 rounded-lg">
+            <p className="text-black font-medium">
+              No post selected. Go back and pick one.
+            </p>
+          </div>
           <Button onClick={() => router.push("/dashboard")} className="mt-4">
             Back to Dashboard
           </Button>
@@ -45,7 +47,7 @@ function PreviewContent() {
 
   const formattedText = post.text.replace(
     /(https?:\/\/[^\s]+)/g,
-    '<a href="#" class="text-green-600 underline">$1</a>'
+    '<a href="#" class="text-black underline decoration-2 underline-offset-2 font-bold">$1</a>'
   );
 
   const handlePost = async () => {
@@ -71,16 +73,16 @@ function PreviewContent() {
 
   if (posted) {
     return (
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-cream">
         <Header />
         <main className="max-w-2xl mx-auto px-6 pt-28 pb-12 flex flex-col items-center justify-center min-h-[80vh]">
-          <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-6">
-            <Check className="w-8 h-8 text-green-600" />
+          <div className="w-20 h-20 rounded-lg bg-lime neo-border neo-shadow flex items-center justify-center mb-6">
+            <Check className="w-10 h-10 text-black" strokeWidth={3} />
           </div>
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Posted to X!
-          </h1>
-          <p className="text-gray-600 mb-8">Ready for your next post?</p>
+          <h1 className="text-3xl font-bold text-black mb-2">Posted to X!</h1>
+          <p className="text-gray-600 font-medium mb-8">
+            Ready for your next post?
+          </p>
           <Button onClick={() => router.push("/dashboard")}>
             Create Another Post
           </Button>
@@ -90,23 +92,27 @@ function PreviewContent() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-cream">
       <Header />
       <main className="max-w-2xl mx-auto px-6 pt-28 pb-12">
-        <h1 className="text-2xl font-bold text-gray-900 mb-6">Your post</h1>
+        <h1 className="text-2xl font-bold text-black mb-6">Your post</h1>
 
-        <div className="bg-gray-50 p-6 rounded-xl border-2 border-gray-200">
+        <div className="bg-white neo-border neo-shadow p-6 rounded-lg">
           <p
-            className="text-base leading-relaxed text-gray-900"
+            className="text-base leading-relaxed text-black"
             dangerouslySetInnerHTML={{ __html: formattedText }}
           />
         </div>
 
-        <p className="text-sm text-gray-500 mt-2">{post.chars} characters</p>
+        <div className="flex items-center gap-3 mt-3">
+          <span className="text-sm font-bold text-gray-600 bg-gray-100 neo-border rounded px-2 py-0.5">
+            {post.chars} chars
+          </span>
+        </div>
 
         {error && (
-          <div className="rounded-lg border-2 border-red-200 bg-red-50 p-4 text-red-700 mt-4">
-            <p className="text-sm">{error}</p>
+          <div className="rounded-lg neo-border bg-pink p-4 text-black mt-4">
+            <p className="text-sm font-bold">{error}</p>
           </div>
         )}
 

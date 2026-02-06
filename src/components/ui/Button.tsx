@@ -12,8 +12,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const variantStyles: Record<ButtonVariant, string> = {
-  primary: "bg-lime text-black hover:bg-lime-dark neo-border neo-shadow neo-press",
-  secondary: "bg-white text-black neo-border neo-shadow neo-press hover:bg-gray-100",
+  primary:
+    "bg-lime text-black hover:bg-lime-dark neo-border neo-shadow neo-press",
+  secondary:
+    "bg-white text-black neo-border neo-shadow neo-press hover:bg-gray-100",
   ghost: "hover:bg-gray-100 text-black border-3 border-transparent",
 };
 
@@ -24,7 +26,17 @@ const sizeStyles: Record<ButtonSize, string> = {
 };
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant = "primary", size = "md", disabled, children, ...props }, ref) => {
+  (
+    {
+      className,
+      variant = "primary",
+      size = "md",
+      disabled,
+      children,
+      ...props
+    },
+    ref
+  ) => {
     return (
       <button
         ref={ref}
@@ -32,7 +44,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           "font-bold rounded-lg transition-all duration-100 cursor-pointer",
           variantStyles[variant],
           sizeStyles[size],
-          disabled && "opacity-50 cursor-not-allowed !shadow-none !translate-0",
+          disabled && "opacity-50 cursor-not-allowed shadow-none! translate-0!",
           className
         )}
         disabled={disabled}

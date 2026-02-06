@@ -6,7 +6,9 @@ interface LoadingStateProps {
   message?: string;
 }
 
-export default function LoadingState({ message = "Finding articles..." }: LoadingStateProps) {
+export default function LoadingState({
+  message = "Finding articles...",
+}: LoadingStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-24">
       <div className="bg-lime neo-border rounded-lg p-4 mb-6 animate-pulse">
