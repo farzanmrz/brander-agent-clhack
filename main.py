@@ -15,6 +15,10 @@ app = FastAPI(title="BranderAgent")
 def health():
     return {"status": "ok"}
 
+# --- Include routers (add-only, no merge conflicts) ---
+from app.routers.search import router as search_router
+app.include_router(search_router)
+
 # Serve React build when present; SPA fallback for client-side routing
 static_dir = Path(__file__).resolve().parent / "static"
 if static_dir.exists() and (static_dir / "index.html").exists():
