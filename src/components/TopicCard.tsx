@@ -24,14 +24,14 @@ export default function TopicCard({
       className={cn(
         "relative text-left neo-border p-6 rounded-lg transition-all duration-100 cursor-pointer w-full neo-press",
         selected
-          ? "bg-lime shadow-[4px_4px_0px_var(--color-black)]"
+          ? "bg-purple-light shadow-[4px_4px_0px_var(--color-black)]"
           : "bg-white neo-shadow hover:translate-y-[-2px] hover:shadow-[4px_6px_0px_var(--color-black)]"
       )}
     >
       <div
         className={cn(
           "absolute top-4 right-4 w-7 h-7 rounded-md neo-border flex items-center justify-center transition-all duration-100",
-          selected ? "bg-black" : "bg-white"
+          selected ? "bg-purple" : "bg-white"
         )}
       >
         {selected && <Check className="w-4 h-4 text-white" strokeWidth={3} />}

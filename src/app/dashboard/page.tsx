@@ -66,7 +66,7 @@ export default function DashboardPage() {
                     `/dashboard/topics?query=${encodeURIComponent(topic)}`
                   );
                 }}
-                className="bg-white neo-border neo-shadow-sm px-5 py-2.5 rounded-lg text-sm font-bold text-black hover:bg-sky transition-all duration-100 cursor-pointer neo-press-sm"
+                className="bg-white neo-border neo-shadow-sm px-5 py-2.5 rounded-lg text-sm font-bold text-black hover:bg-purple-light transition-all duration-100 cursor-pointer neo-press-sm"
               >
                 {topic}
               </button>

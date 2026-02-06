@@ -11,15 +11,15 @@ interface PostCardProps {
 }
 
 const toneBadgeColor: Record<string, string> = {
-  "Technical Take": "bg-sky",
-  Contrarian: "bg-pink",
-  Funny: "bg-peach",
+  "Technical Take": "bg-purple-light",
+  Contrarian: "bg-purple-mid/30",
+  Funny: "bg-purple-light",
 };
 
 const toneEmoji: Record<string, string> = {
-  "Technical Take": "🔬",
-  Contrarian: "🔥",
-  Funny: "😂",
+  "Technical Take": "\uD83D\uDD2C",
+  Contrarian: "\uD83D\uDD25",
+  Funny: "\uD83D\uDE02",
 };
 
 export default function PostCard({
@@ -34,15 +34,15 @@ export default function PostCard({
     '<span class="text-black underline decoration-2 underline-offset-2">$1</span>'
   );
 
-  const badgeColor = toneBadgeColor[angle] || "bg-lavender";
-  const emoji = toneEmoji[angle] || "✍️";
+  const badgeColor = toneBadgeColor[angle] || "bg-purple-light";
+  const emoji = toneEmoji[angle] || "\u270D\uFE0F";
 
   return (
     <div
       className={cn(
         "neo-border p-6 rounded-lg transition-all duration-100 flex flex-col",
         selected
-          ? "bg-lime shadow-[4px_4px_0px_var(--color-black)]"
+          ? "bg-purple-light shadow-[4px_4px_0px_var(--color-black)]"
           : "bg-white neo-shadow"
       )}
     >
@@ -67,8 +67,8 @@ export default function PostCard({
           className={cn(
             "px-4 py-2 text-sm font-bold rounded-lg neo-border transition-all duration-100 cursor-pointer neo-press-sm",
             selected
-              ? "bg-black text-white shadow-none"
-              : "bg-white text-black neo-shadow-sm hover:bg-lime"
+              ? "bg-purple text-white shadow-none"
+              : "bg-white text-black neo-shadow-sm hover:bg-purple-light"
           )}
         >
           {selected ? "Selected" : "Select"}

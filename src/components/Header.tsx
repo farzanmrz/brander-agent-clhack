@@ -91,6 +91,18 @@ export default function Header() {
                 strokeWidth={3}
                 fill={yolo ? "currentColor" : "none"}
               />
+              <div className="absolute right-0 mt-2 w-48 bg-white neo-border neo-shadow rounded-lg py-2 z-50">
+                <button className="w-full px-4 py-2.5 text-left text-sm font-semibold text-black hover:bg-purple-light flex items-center gap-2 transition-colors">
+                  <Settings className="w-4 h-4" />
+                  Settings
+                </button>
+                <Link
+                  href="/"
+                  className="w-full px-4 py-2.5 text-left text-sm font-semibold text-black hover:bg-purple-light flex items-center gap-2 transition-colors"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Sign out
+                </Link>
               YOLO
             </button>
           </div>

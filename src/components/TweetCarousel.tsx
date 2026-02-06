@@ -64,7 +64,7 @@ export default function TweetCarousel() {
               )}
             >
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-8 h-8 rounded-md bg-black neo-border flex items-center justify-center text-white font-bold text-xs">
+                <div className="w-8 h-8 rounded-md bg-purple neo-border flex items-center justify-center text-white font-bold text-xs">
                   {(post.author ||
                     post.original_author ||
                     "?")[0].toUpperCase()}
@@ -78,7 +78,7 @@ export default function TweetCarousel() {
                   </p>
                 </div>
                 {post.type === "repost" && (
-                  <span className="ml-auto text-xs font-bold bg-lavender neo-border rounded px-1.5 py-0.5">
+                  <span className="ml-auto text-xs font-bold bg-purple-light neo-border rounded px-1.5 py-0.5">
                     RT
                   </span>
                 )}
