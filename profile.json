@@ -1,0 +1,78 @@
+{
+  "profile": {
+    "name": "shawn",
+    "handle": "@shawnbuilds",
+    "bio": "@cursor_ai ambassador | http://matchya.app founder | full stack engineer",
+    "tagline": "Learn my 10X Cursor workflows (300+ students)",
+    "account_type": "Software Company",
+    "location": "San Francisco",
+    "website": "linktr.ee/shawnesquivel",
+    "joined": "April 2023",
+    "stats": {
+      "following": 517,
+      "followers": 1161
+    },
+    "verified": false,
+    "scraped_at": "2024-02-06"
+  },
+  "posts": [
+    {
+      "id": 1,
+      "type": "original_post",
+      "author": "shawn",
+      "handle": "@shawnbuilds",
+      "timestamp": "1h",
+      "content": "hello from BranderAgent API test",
+      "engagement": {
+        "replies": null,
+        "reposts": null,
+        "likes": null,
+        "views": null
+      }
+    },
+    {
+      "id": 2,
+      "type": "repost",
+      "original_author": "X Freeze",
+      "original_handle": "@XFreeze",
+      "timestamp": "Feb 5",
+      "content": "Corporations that are purely AI and robotics will vastly outperform any corporations that have people in the loop. You can think of it like how 'computer' used to be a job that humans had. You would go and get a job as a computer where you would do calculations. They had entire...",
+      "media": {
+        "type": "video",
+        "duration": "1:22"
+      },
+      "truncated": true
+    },
+    {
+      "id": 3,
+      "type": "original_post",
+      "author": "shawn",
+      "handle": "@shawnbuilds",
+      "timestamp": "3h",
+      "content": "I threw a cursor event w 100+ participants. Asked how many have used Background Agents > 2 hands went up. Even Cursor power users are sleeping on this feature",
+      "quote_tweet": {
+        "author": "eric zakariasson",
+        "handle": "@ericzakariasson",
+        "timestamp": "4h",
+        "content": "this morning i woke up to 5 PRs that i kicked off with cloud agents last night. bugbot had reviewed all of them, suggested fixes, and auto-pushed them while i was sleeping. then another agent tested the changes to make sure they were functionally correct. you can also just spin...",
+        "truncated": true
+      }
+    },
+    {
+      "id": 4,
+      "type": "original_post",
+      "author": "shawn",
+      "handle": "@shawnbuilds",
+      "timestamp": "13h",
+      "content": "After being in SF for seven days, I believe this more than ever",
+      "quote_tweet": {
+        "author": "Guillermo Rauch",
+        "handle": "@rauchg",
+        "timestamp": "Feb 5",
+        "content": "There's never been a better time to start a company. If you're a founder, this is an opportunity to have access to the Vercel team, investors and $6M in credits. A new class of companies is emerging. Smaller, flatter, faster growing, autonomous. Agentic. I encourage you to...",
+        "url": "x.com/vercel/status/…",
+        "truncated": true
+      }
+    }
+  ]
+}

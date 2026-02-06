@@ -8,8 +8,10 @@ from typing import List
 from backend.services.gemini_service import (
     generate_sphere_queries,
     generate_tweets_from_queries,
+    generate_styled_tweets,
     QueryContent,
-    TweetGenerationResponse
+    TweetGenerationResponse,
+    StyledTweetsResponse,
 )
 
 router = APIRouter(prefix="/api/sphere", tags=["sphere"])
@@ -85,4 +87,23 @@ def generate_tweets(request: TweetGenerationRequest):
         raise HTTPException(
             status_code=500,
             detail=f"Failed to generate tweets: {str(e)}"
+        )
+
+
+@router.post("/generate-styled-tweets", response_model=StyledTweetsResponse)
+def generate_styled(request: TweetGenerationRequest):
+    """
+    Generate 3 tweets with distinct tones (Technical Take, Contrarian, Funny)
+    from combined article content.
+    """
+    try:
+        response = generate_styled_tweets(
+            queries=request.queries,
+            sphere_description=request.sphere_description
+        )
+        return response
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=f"Failed to generate styled tweets: {str(e)}"
         )

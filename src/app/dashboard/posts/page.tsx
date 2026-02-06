@@ -55,8 +55,8 @@ function PostsContent() {
         }
         const searchData = await searchRes.json();
 
-        // Step 2: Generate tweets from article content
-        setLoadingMessage("Crafting posts from articles...");
+        // Step 2: Generate 3 styled tweets (Technical, Contrarian, Funny)
+        setLoadingMessage("Crafting 3 unique angles...");
         const queriesWithContent = searchData.queries.map(
           (q: { query: string; content: string }) => ({
             query: q.query,
@@ -64,7 +64,7 @@ function PostsContent() {
           })
         );
 
-        const tweetRes = await fetch("/api/sphere/generate-tweets", {
+        const tweetRes = await fetch("/api/sphere/generate-styled-tweets", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -80,11 +80,11 @@ function PostsContent() {
         }
         const tweetData = await tweetRes.json();
 
-        // Map API response to PostCard format
+        // Map styled tweets to PostCard format
         const generated: GeneratedPost[] = tweetData.tweets.map(
-          (t: { query: string; tweet: string }, i: number) => ({
+          (t: { tone: string; tweet: string }, i: number) => ({
             id: i + 1,
-            angle: t.query,
+            angle: t.tone,
             text: t.tweet,
             chars: t.tweet.length,
           })
@@ -121,9 +121,12 @@ function PostsContent() {
           <span className="text-sm">Back</span>
         </button>
 
-        <h1 className="text-3xl font-bold text-black mb-8">
-          Choose your favorite angle
+        <h1 className="text-3xl font-bold text-black mb-2">
+          Pick your favorite angle
         </h1>
+        <p className="text-gray-600 font-medium mb-8">
+          3 takes on the same topic — choose the voice that fits
+        </p>
 
         {loading ? (
           <LoadingState message={loadingMessage} />

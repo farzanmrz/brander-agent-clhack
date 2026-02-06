@@ -18,6 +18,7 @@ function PreviewContent() {
   const [post, setPost] = useState<PreviewPost | null>(null);
   const [posting, setPosting] = useState(false);
   const [posted, setPosted] = useState(false);
+  const [tweetUrl, setTweetUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -63,6 +64,12 @@ function PreviewContent() {
         const data = await res.json().catch(() => ({}));
         throw new Error(data.detail || `Post failed: ${res.status}`);
       }
+      const data = await res.json();
+      // Extract tweet ID from Composio response
+      const tweetId = data?.result?.data?.data?.id;
+      if (tweetId) {
+        setTweetUrl(`https://x.com/i/status/${tweetId}`);
+      }
       setPosted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to post");
@@ -83,9 +90,27 @@ function PreviewContent() {
           <p className="text-gray-600 font-medium mb-8">
             Ready for your next post?
           </p>
-          <Button onClick={() => router.push("/dashboard")}>
-            Create Another Post
-          </Button>
+          <div className="flex gap-4">
+            {tweetUrl && (
+              <a
+                href={tweetUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-black neo-border neo-shadow text-white px-5 py-3 rounded-lg font-bold transition-all duration-100 neo-press flex items-center gap-2"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                </svg>
+                View on X
+              </a>
+            )}
+            <Button
+              onClick={() => router.push("/dashboard")}
+              variant={tweetUrl ? "secondary" : "primary"}
+            >
+              Create Another Post
+            </Button>
+          </div>
         </main>
       </div>
     );
