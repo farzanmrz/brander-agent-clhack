@@ -7,9 +7,9 @@ from dotenv import load_dotenv
 
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 app = FastAPI(title="BranderAgent")
 
@@ -38,5 +38,32 @@ app.include_router(tweet_router)
 
 # Frontend: serve static export (after API so /api is not overridden)
 out_dir = Path(__file__).resolve().parent / "out"
-if out_dir.exists():
-    app.mount("/", StaticFiles(directory=str(out_dir), html=True), name="frontend")
+
+
+@app.get("/{path:path}")
+def serve_frontend(path: str):
+    """Serve frontend: .html for routes like /dashboard; static files by path."""
+    if path.startswith("api") or ".." in path or not out_dir.exists():
+        raise HTTPException(status_code=404, detail="Not Found")
+    if not path:
+        index = out_dir / "index.html"
+        if index.is_file():
+            return FileResponse(index)
+        raise HTTPException(status_code=404, detail="Not Found")
+    # Resolve to a path under out_dir (no traversal)
+    base = (out_dir / path).resolve()
+    if not str(base).startswith(str(out_dir.resolve())):
+        raise HTTPException(status_code=404, detail="Not Found")
+    if base.is_file():
+        return FileResponse(base)
+    if base.is_dir():
+        index = base / "index.html"
+        if index.is_file():
+            return FileResponse(index)
+    # Next.js export: /dashboard -> dashboard.html (no trailing slash)
+    last = path.split("/")[-1]
+    if "." not in last:
+        html_file = out_dir / f"{path}.html"
+        if html_file.is_file():
+            return FileResponse(html_file)
+    raise HTTPException(status_code=404, detail="Not Found")
