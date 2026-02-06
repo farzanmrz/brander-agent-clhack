@@ -8,10 +8,10 @@ This script tests the generate_tweets_from_queries function with sample data.
 import sys
 import os
 
-# Add parent directory to path to import app modules
+# Add parent directory to path to import backend modules
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
-from app.services.gemini_service import QueryContent, generate_tweets_from_queries
+from backend.services.gemini_service import QueryContent, generate_tweets_from_queries
 
 
 def test_tweet_generation():
