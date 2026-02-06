@@ -5,6 +5,11 @@ Backend runs on port 3000 (or PORT env). Replace with full app when ready.
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# Load .env from project root (reliable regardless of CWD)
+load_dotenv(Path(__file__).resolve().parent / ".env")
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
@@ -16,9 +21,9 @@ def health():
     return {"status": "ok"}
 
 # --- Include routers (add-only, no merge conflicts) ---
-from app.routers.search import router as search_router
-from app.routers.sphere import router as sphere_router
-from app.routers.tweet import router as tweet_router
+from backend.routers.search import router as search_router
+from backend.routers.sphere import router as sphere_router
+from backend.routers.tweet import router as tweet_router
 app.include_router(search_router)
 app.include_router(sphere_router)
 app.include_router(tweet_router)
