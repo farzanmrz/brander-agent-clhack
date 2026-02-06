@@ -16,9 +16,9 @@ def health():
     return {"status": "ok"}
 
 # --- Include routers (add-only, no merge conflicts) ---
-from app.routers.search import router as search_router
-from app.routers.sphere import router as sphere_router
-from app.routers.tweet import router as tweet_router
+from backend.app.routers.search import router as search_router
+from backend.app.routers.sphere import router as sphere_router
+from backend.app.routers.tweet import router as tweet_router
 app.include_router(search_router)
 app.include_router(sphere_router)
 app.include_router(tweet_router)

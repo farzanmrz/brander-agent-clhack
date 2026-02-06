@@ -4,7 +4,7 @@ Sphere routes — endpoints for sphere creation and query generation.
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
-from app.services.gemini_service import generate_sphere_queries
+from backend.app.services.gemini_service import generate_sphere_queries
 
 router = APIRouter(prefix="/api/sphere", tags=["sphere"])
 
