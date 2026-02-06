@@ -4,41 +4,57 @@ You.com Data Connector (YDC) Service: Web search + content fetching via You.com 
 
 import os
 import requests
-from typing import Optional
 from dotenv import load_dotenv
 
 load_dotenv()
 
 YDC_API_KEY = os.getenv("YDC_API_KEY")
 YDC_SEARCH_ENDPOINT = "https://ydc-index.io/v1/search"
-YDC_CONTENTS_ENDPOINT = "https://ydc-index.io/v1/contents"
 
 
-def search_web(query: str, count: int = 5, freshness: str = "week") -> dict:
+def search_web(query: str, count: int = 5, freshness: str = "month") -> dict:
     """
     Search via You.com and return raw results.
-
-    Args:
-        query: Search query string
-        count: Number of results (default 5)
-        freshness: Time range — "day", "week", "month", "year" (default "week")
-
-    Returns:
-        Raw JSON response from You.com API
+    Uses livecrawl to get full markdown content inline (no separate contents call).
+    Falls back to wider freshness if the initial request fails.
     """
     if not YDC_API_KEY:
         raise ValueError("YDC_API_KEY not set in environment")
 
-    resp = requests.get(
-        YDC_SEARCH_ENDPOINT,
-        headers={"X-API-Key": YDC_API_KEY},
-        params={"query": query, "count": count, "freshness": freshness},
-    )
-    resp.raise_for_status()
-    return resp.json()
+    params = {
+        "query": query,
+        "count": count,
+        "livecrawl": "web",
+        "livecrawl_formats": "markdown",
+    }
+    if freshness:
+        params["freshness"] = freshness
+
+    try:
+        resp = requests.get(
+            YDC_SEARCH_ENDPOINT,
+            headers={"X-API-Key": YDC_API_KEY},
+            params=params,
+            timeout=15,
+        )
+        resp.raise_for_status()
+        return resp.json()
+    except requests.RequestException:
+        if freshness:
+            # Retry without freshness filter
+            params.pop("freshness", None)
+            resp = requests.get(
+                YDC_SEARCH_ENDPOINT,
+                headers={"X-API-Key": YDC_API_KEY},
+                params=params,
+                timeout=15,
+            )
+            resp.raise_for_status()
+            return resp.json()
+        raise
 
 
-def search_web_slim(query: str, count: int = 5, freshness: str = "week") -> dict:
+def search_web_slim(query: str, count: int = 5, freshness: str = "month") -> dict:
     """
     Search via You.com and return a cleaned-up response with just
     the fields we care about (title, url, description).
@@ -66,56 +82,37 @@ def search_web_slim(query: str, count: int = 5, freshness: str = "week") -> dict
     return {"query": query, "web": web, "news": news}
 
 
-def fetch_contents(urls: list[str]) -> list[dict]:
+def search_and_fetch(queries: list[str], count: int = 5, freshness: str = "month") -> list[dict]:
     """
-    Fetch full page content for a list of URLs via You.com Contents API.
-
-    Returns list of {url, title, markdown} dicts.
-    """
-    if not YDC_API_KEY:
-        raise ValueError("YDC_API_KEY not set in environment")
-    if not urls:
-        return []
-
-    resp = requests.post(
-        YDC_CONTENTS_ENDPOINT,
-        headers={"X-API-Key": YDC_API_KEY, "Content-Type": "application/json"},
-        json={"urls": urls, "formats": ["markdown"]},
-        timeout=30,
-    )
-    resp.raise_for_status()
-    return resp.json()
-
-
-def search_and_fetch(queries: list[str], count: int = 5, freshness: str = "week") -> list[dict]:
-    """
-    For each query: search You.com → extract URLs → fetch full content → concatenate.
+    For each query: search You.com with livecrawl → extract markdown content.
+    Single API call per query (no separate contents fetch needed).
 
     Returns:
         [{"query": "...", "content": "full concatenated markdown"}, ...]
     """
     results = []
     for query in queries:
-        # Step 1: Search to get URLs
-        slim = search_web_slim(query, count=count, freshness=freshness)
-        urls = [item["url"] for item in slim.get("web", []) if item.get("url")]
+        try:
+            raw = search_web(query, count=count, freshness=freshness)
+        except Exception:
+            results.append({"query": query, "content": ""})
+            continue
 
-        # Step 2: Fetch full content for those URLs
+        web_results = raw.get("results", {}).get("web", [])
         content_parts = []
-        if urls:
-            try:
-                pages = fetch_contents(urls)
-                for page in pages:
-                    md = page.get("markdown") or ""
-                    if md.strip():
-                        content_parts.append(md.strip())
-            except Exception as e:
-                # If contents fetch fails, fall back to search descriptions
-                content_parts = [
-                    item.get("description", "")
-                    for item in slim.get("web", [])
-                    if item.get("description")
-                ]
+
+        for item in web_results:
+            # livecrawl puts content in item["contents"]
+            contents = item.get("contents")
+            if contents:
+                md = contents.get("markdown") or ""
+                if md.strip():
+                    content_parts.append(md.strip())
+                    continue
+            # Fallback to description if no livecrawl content
+            desc = item.get("description", "")
+            if desc.strip():
+                content_parts.append(desc.strip())
 
         results.append({
             "query": query,

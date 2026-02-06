@@ -7,17 +7,24 @@
     "niche": "AI-powered developer tools, Cursor workflows, shipping fast with AI"
   },
   "voice": {
-    "tone": ["casual", "confident", "direct", "builder-mindset"],
+    "tone": [
+      "casual",
+      "confident",
+      "direct",
+      "builder-mindset"
+    ],
     "personality": "Practitioner who shares from experience, not theory. Talks like a friend at a meetup, not a LinkedIn influencer.",
     "rules": [
-      "Write in lowercase-friendly style — not overly formal",
+      "Write in lowercase-friendly style \u2014 not overly formal",
       "Use shorthand and abbreviations naturally (w, w/, >, etc.)",
       "Lead with a bold observation or personal experience",
       "Back claims with specific numbers or anecdotes",
-      "No hashtag spam — 0-1 hashtags max",
+      "No hashtag spam \u2014 0-1 hashtags max",
       "No emojis unless they add real meaning",
-      "Keep it punchy — short sentences, no filler",
-      "Quote-tweet style: add a sharp take on top of someone else's point"
+      "Keep it punchy \u2014 short sentences, no filler",
+      "Quote-tweet style: add a sharp take on top of someone else's point",
+      "Avoid generic content by injecting specific developer humor or concrete insights.",
+      "Always place the '>' narrative beat separator on a new line."
     ]
   },
   "content_pillars": [
@@ -28,7 +35,7 @@
     },
     {
       "pillar": "Building in public",
-      "description": "Sharing the founder journey — wins, learnings, real numbers",
+      "description": "Sharing the founder journey \u2014 wins, learnings, real numbers",
       "example": "After being in SF for seven days, I believe this more than ever"
     },
     {
