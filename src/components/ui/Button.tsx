@@ -13,10 +13,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    "bg-lime text-black hover:bg-lime-dark neo-border neo-shadow neo-press",
+    "bg-purple text-white hover:bg-purple-dark neo-border neo-shadow neo-press",
   secondary:
-    "bg-white text-black neo-border neo-shadow neo-press hover:bg-gray-100",
-  ghost: "hover:bg-gray-100 text-black border-3 border-transparent",
+    "bg-white text-black neo-border neo-shadow neo-press hover:bg-purple-light",
+  ghost: "hover:bg-purple-light text-black border-3 border-transparent",
 };
 
 const sizeStyles: Record<ButtonSize, string> = {

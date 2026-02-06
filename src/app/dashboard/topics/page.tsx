@@ -46,7 +46,7 @@ function TopicsContent() {
       const mapped: SphereTopic[] = (data.queries || []).map(
         (q: string, i: number) => ({
           id: i + 1,
-          icon: "🔍",
+          icon: "\uD83D\uDD0D",
           title: q,
           description: "Search angle for finding relevant content",
         })
@@ -103,7 +103,7 @@ function TopicsContent() {
         {loading ? (
           <LoadingState message="Finding topics..." />
         ) : error ? (
-          <div className="rounded-lg neo-border bg-pink p-6 text-black">
+          <div className="rounded-lg neo-border bg-purple-light p-6 text-black">
             <p className="font-bold mb-2">Could not load topics</p>
             <p className="text-sm mb-4">{error}</p>
             <Button onClick={fetchTopics} size="sm">
@@ -134,7 +134,7 @@ function TopicsContent() {
       </main>
 
       {!loading && topics.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-peach neo-border border-b-0 border-l-0 border-r-0 p-4">
+        <div className="fixed bottom-0 left-0 right-0 bg-purple-light neo-border border-b-0 border-l-0 border-r-0 p-4">
           <div className="max-w-5xl mx-auto">
             <Button
               onClick={handleGenerate}

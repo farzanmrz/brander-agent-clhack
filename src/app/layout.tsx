@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Chirp - Your AI-powered voice on X",
+  title: "Ditto - Your AI-powered voice on X",
   description: "Automated X posting platform based on your interests",
 };
 

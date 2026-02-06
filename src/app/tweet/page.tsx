@@ -44,7 +44,7 @@ export default function TweetTestPage() {
 
   return (
     <div className="min-h-screen bg-cream p-8 max-w-2xl mx-auto">
-      <div className="inline-block bg-lavender neo-border neo-shadow-sm rounded-lg px-3 py-1 mb-4">
+      <div className="inline-block bg-purple-light neo-border neo-shadow-sm rounded-lg px-3 py-1 mb-4">
         <span className="text-xs font-bold uppercase tracking-wide">
           Test Page
         </span>
@@ -57,7 +57,7 @@ export default function TweetTestPage() {
       <textarea
         value={text}
         onChange={(e) => setText(e.target.value)}
-        className="w-full neo-border neo-shadow-sm rounded-lg p-4 text-base mb-2 h-32 resize-none outline-none focus:shadow-[4px_4px_0px_var(--color-lime)] transition-all duration-100 bg-white"
+        className="w-full neo-border neo-shadow-sm rounded-lg p-4 text-base mb-2 h-32 resize-none outline-none focus:shadow-[4px_4px_0px_var(--color-purple-mid)] transition-all duration-100 bg-white"
       />
       <p className="text-xs font-bold text-gray-500 mb-4">
         {text.length} characters
@@ -66,7 +66,7 @@ export default function TweetTestPage() {
       <button
         onClick={handlePost}
         disabled={loading || !text.trim()}
-        className="bg-lime neo-border neo-shadow text-black px-6 py-3 rounded-lg font-bold disabled:opacity-50 cursor-pointer neo-press transition-all duration-100"
+        className="bg-purple neo-border neo-shadow text-white px-6 py-3 rounded-lg font-bold disabled:opacity-50 cursor-pointer neo-press transition-all duration-100"
       >
         {loading ? "Posting..." : "Post Tweet"}
       </button>
@@ -75,8 +75,8 @@ export default function TweetTestPage() {
         <div
           className={`mt-6 p-4 rounded-lg neo-border font-bold ${
             status.startsWith("SUCCESS")
-              ? "bg-lime text-black"
-              : "bg-pink text-black"
+              ? "bg-green-light text-black"
+              : "bg-purple-light text-black"
           }`}
         >
           <p>{status}</p>

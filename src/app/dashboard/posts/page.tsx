@@ -131,7 +131,7 @@ function PostsContent() {
         {loading ? (
           <LoadingState message={loadingMessage} />
         ) : error ? (
-          <div className="rounded-lg neo-border bg-pink p-6 text-black">
+          <div className="rounded-lg neo-border bg-purple-light p-6 text-black">
             <p className="font-bold mb-2">Could not generate posts</p>
             <p className="text-sm mb-4">{error}</p>
             <Button onClick={() => router.back()} size="sm">
