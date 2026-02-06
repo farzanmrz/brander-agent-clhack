@@ -3,24 +3,110 @@
 import Header from "@/components/Header";
 import LoadingState from "@/components/LoadingState";
 import PostCard from "@/components/PostCard";
-import { mockPosts } from "@/lib/mockData";
+import Button from "@/components/ui/Button";
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+
+interface GeneratedPost {
+  id: number;
+  angle: string;
+  text: string;
+  chars: number;
+}
 
 function PostsContent() {
   const router = useRouter();
   const [selectedPost, setSelectedPost] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMessage, setLoadingMessage] = useState("Searching the web...");
+  const [posts, setPosts] = useState<GeneratedPost[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000);
-    return () => clearTimeout(timer);
+    const raw = sessionStorage.getItem("brander_generate");
+    if (!raw) {
+      setError("No topics selected. Go back and pick some angles first.");
+      setLoading(false);
+      return;
+    }
+
+    const { sphereDescription, selectedQueries } = JSON.parse(raw) as {
+      sphereDescription: string;
+      selectedQueries: string[];
+    };
+
+    async function generate() {
+      try {
+        // Step 1: Fetch web content for each selected query
+        setLoadingMessage("Searching the web for articles...");
+        const searchRes = await fetch("/api/search/contents", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            queries: selectedQueries,
+            count: 5,
+            freshness: "week",
+          }),
+        });
+        if (!searchRes.ok) {
+          const data = await searchRes.json().catch(() => ({}));
+          throw new Error(data.detail || `Search failed: ${searchRes.status}`);
+        }
+        const searchData = await searchRes.json();
+
+        // Step 2: Generate tweets from article content
+        setLoadingMessage("Crafting posts from articles...");
+        const queriesWithContent = searchData.queries.map(
+          (q: { query: string; content: string }) => ({
+            query: q.query,
+            content: q.content,
+          })
+        );
+
+        const tweetRes = await fetch("/api/sphere/generate-tweets", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            sphere_description: sphereDescription,
+            queries: queriesWithContent,
+          }),
+        });
+        if (!tweetRes.ok) {
+          const data = await tweetRes.json().catch(() => ({}));
+          throw new Error(
+            data.detail || `Tweet generation failed: ${tweetRes.status}`
+          );
+        }
+        const tweetData = await tweetRes.json();
+
+        // Map API response to PostCard format
+        const generated: GeneratedPost[] = tweetData.tweets.map(
+          (t: { query: string; tweet: string }, i: number) => ({
+            id: i + 1,
+            angle: t.query,
+            text: t.tweet,
+            chars: t.tweet.length,
+          })
+        );
+        setPosts(generated);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    generate();
   }, []);
 
-  const handleContinue = () => {
-    if (selectedPost === null) return;
-    router.push(`/dashboard/preview?postId=${selectedPost}`);
+  const handleSelect = (post: GeneratedPost) => {
+    setSelectedPost(post.id);
+    sessionStorage.setItem(
+      "brander_preview",
+      JSON.stringify({ text: post.text, angle: post.angle, chars: post.chars })
+    );
+    router.push("/dashboard/preview");
   };
 
   return (
@@ -40,25 +126,28 @@ function PostsContent() {
         </h1>
 
         {loading ? (
-          <LoadingState message="Crafting posts..." />
+          <LoadingState message={loadingMessage} />
+        ) : error ? (
+          <div className="rounded-lg border-2 border-red-200 bg-red-50 p-6 text-red-700">
+            <p className="font-semibold mb-2">Could not generate posts</p>
+            <p className="text-sm mb-4">{error}</p>
+            <Button onClick={() => router.back()} size="sm">
+              Go Back
+            </Button>
+          </div>
         ) : (
-          <>
-            <div className="grid md:grid-cols-3 gap-6">
-              {mockPosts.map((post) => (
-                <PostCard
-                  key={post.id}
-                  angle={post.angle}
-                  text={post.text}
-                  chars={post.chars}
-                  selected={selectedPost === post.id}
-                  onSelect={() => {
-                    setSelectedPost(post.id);
-                    handleContinue();
-                  }}
-                />
-              ))}
-            </div>
-          </>
+          <div className="grid md:grid-cols-3 gap-6">
+            {posts.map((post) => (
+              <PostCard
+                key={post.id}
+                angle={post.angle}
+                text={post.text}
+                chars={post.chars}
+                selected={selectedPost === post.id}
+                onSelect={() => handleSelect(post)}
+              />
+            ))}
+          </div>
         )}
       </main>
     </div>

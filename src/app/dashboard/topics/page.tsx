@@ -70,8 +70,14 @@ function TopicsContent() {
   };
 
   const handleGenerate = () => {
-    const topicIds = selected.join(",");
-    router.push(`/dashboard/posts?topics=${topicIds}`);
+    const selectedQueries = topics
+      .filter((t) => selected.includes(t.id))
+      .map((t) => t.title);
+    sessionStorage.setItem(
+      "brander_generate",
+      JSON.stringify({ sphereDescription: query, selectedQueries })
+    );
+    router.push("/dashboard/posts");
   };
 
   return (
@@ -89,9 +95,7 @@ function TopicsContent() {
         <h1 className="text-3xl font-bold text-gray-900 mb-2">
           Pick the angles you want to explore
         </h1>
-        <p className="text-gray-600 mb-8">
-          Results for &ldquo;{query}&rdquo;
-        </p>
+        <p className="text-gray-600 mb-8">Results for &ldquo;{query}&rdquo;</p>
 
         {loading ? (
           <LoadingState message="Finding topics..." />
@@ -133,7 +137,8 @@ function TopicsContent() {
               size="lg"
               className="w-full"
             >
-              Generate Posts{selected.length > 0 ? ` (${selected.length} selected)` : ""}
+              Generate Posts
+              {selected.length > 0 ? ` (${selected.length} selected)` : ""}
             </Button>
           </div>
         </div>

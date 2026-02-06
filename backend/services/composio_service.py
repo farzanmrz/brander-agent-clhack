@@ -9,14 +9,22 @@ Requires:
 import os
 from dotenv import load_dotenv
 from composio import Composio
+from composio.client.enums import Action
 
 load_dotenv()
 
-# Must match the user_id tied to your connected Twitter account.
-# Check Composio dashboard -> Connected Accounts -> "User ID" column.
-DEFAULT_USER_ID = "pg-test-8e448524-361d-49b6-9176-538e26c37814"
+DEFAULT_USER_ID = "default"
 
 composio = Composio(api_key=os.getenv("COMPOSIO_API_KEY"))
+
+
+def _get_twitter_connected_account() -> str:
+    """Find the active Twitter connected_account ID from Composio."""
+    accounts = composio.connected_accounts.get()
+    for a in accounts:
+        if a.appUniqueId == "twitter" and a.status == "ACTIVE":
+            return a.id
+    raise ValueError("No active Twitter connected account found in Composio")
 
 
 def post_tweet(text: str, user_id: str = DEFAULT_USER_ID) -> dict:
@@ -25,14 +33,16 @@ def post_tweet(text: str, user_id: str = DEFAULT_USER_ID) -> dict:
 
     Args:
         text: Tweet content (max 280 chars)
-        user_id: Composio user_id linked to a Twitter account
+        user_id: Composio entity_id linked to a Twitter account
 
     Returns:
         Raw Composio execution result
     """
-    result = composio.tools.execute(
-        "TWITTER_CREATION_OF_A_POST",
-        user_id=user_id,
-        arguments={"text": text},
+    connected_account = _get_twitter_connected_account()
+    result = composio.actions.execute(
+        action=Action.TWITTER_CREATION_OF_A_POST,
+        params={"text": text},
+        entity_id=user_id,
+        connected_account=connected_account,
     )
     return result
