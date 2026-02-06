@@ -4,7 +4,7 @@ Tweet routes — post tweets via Composio.
 from fastapi import APIRouter, Query
 from pydantic import BaseModel
 
-from backend.services.composio_service import post_tweet, DEFAULT_USER_ID
+from backend.app.services.composio_service import post_tweet, DEFAULT_USER_ID
 
 router = APIRouter(prefix="/api/tweet", tags=["tweet"])
 

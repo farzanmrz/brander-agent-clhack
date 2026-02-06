@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List
 
-from app.services.gemini_service import (
+from backend.services.gemini_service import (
     generate_sphere_queries,
     generate_tweets_from_queries,
     QueryContent,
