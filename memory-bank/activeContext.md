@@ -1,7 +1,7 @@
 # Active Context: BranderAgent
 
 ## Current Focus
-**Major project flow revision completed.** Environment setup complete. Team expanded to 4 developers. Ready to begin implementation of revised flow: original tweet creation from researched web content (not replying to existing tweets).
+**Sphere query generation feature complete.** First piece of the agent pipeline is now functional: users can input a free-text sphere description and Gemini generates 5 distinct, varied search queries to find relevant content. Ready to implement next phase: You.com integration for content discovery.
 
 ## Recent Changes
 - Created project directory `brander-agent-clhack`.
@@ -13,23 +13,27 @@
 - Installed all required packages: fastapi, uvicorn[standard], google-genai, composio-core, youdotcom, python-dotenv, jinja2, aiohttp.
 - Generated `environment.yml` for reproducibility.
 - Committed and pushed all changes (commit `9bfc091`: "initial setup").
-- **Updated memory bank with revised project flow (commit pending).**
+- **Created feature branch `ft/sphere-setup` (commit `8d2b6f0`):**
+  - Created `.env.example` template with all required API keys
+  - Implemented `app/services/gemini_service.py` with `generate_sphere_queries()` function
+  - Created `app/scripts/test_sphere_queries.py` test script
+  - Configured Gemini API client with `gemini-3-pro` model
+  - Tested and verified query generation works end-to-end
+  - Merged into `main` and pushed both branches to remote
 
-## Next Steps (Revised Flow)
-1. Create `.env.example` template for API keys.
+## Next Steps (Remaining Work)
+1. Integrate You.com APIs (Search + Live News) - run 5 queries, ~10 results each.
 2. Initialize FastAPI app structure (main.py, routers, models).
 3. Set up database schema (SQLite) for spheres, queries, sources, drafts, and feedback.
 4. Implement Twitter OAuth via Composio.
 5. Implement sphere creation endpoint (free-text description input).
-6. Implement Gemini query generation (5 queries from sphere description).
-7. Implement query review UI (display + optional editing before search).
-8. Integrate You.com APIs (Search + Live News) - run 5 queries, ~10 results each.
-9. Implement source selection UI (checklist of results grouped by query).
-10. Implement Gemini tweet drafting (based on selected sources + feedback).
-11. Implement draft review UI (approve/edit/reject).
-12. Implement tweet posting via Composio.
-13. Implement feedback loop storage (drafts, query tweaks, source selections).
-14. Deploy to Render.
+6. Implement query review UI (display + optional editing before search).
+7. Implement source selection UI (checklist of results grouped by query).
+8. Implement Gemini tweet drafting (based on selected sources + feedback).
+9. Implement draft review UI (approve/edit/reject).
+10. Implement tweet posting via Composio.
+11. Implement feedback loop storage (drafts, query tweaks, source selections).
+12. Deploy to Render.
 
 ## Active Decisions
 - Use plain Python functions for API orchestration (no LangChain).
