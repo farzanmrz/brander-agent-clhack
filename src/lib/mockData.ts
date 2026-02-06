@@ -52,33 +52,6 @@ export const mockPosts = [
   },
 ];
 
-export const mockRecentPosts = [
-  {
-    id: 1,
-    text: "The future of AI isn't just about capability - it's about alignment. Watching Anthropic's approach closely.",
-    postedAt: "2 hours ago",
-    impressions: 1243,
-    likes: 47,
-    reposts: 12,
-  },
-  {
-    id: 2,
-    text: "Hot take: The best AI products in 2026 won't be chatbots. They'll be invisible agents that handle the boring stuff.",
-    postedAt: "Yesterday",
-    impressions: 3891,
-    likes: 156,
-    reposts: 43,
-  },
-  {
-    id: 3,
-    text: "Just tried GPT-5's reasoning mode on a complex coding task. The gap between models is shrinking fast.",
-    postedAt: "2 days ago",
-    impressions: 892,
-    likes: 29,
-    reposts: 8,
-  },
-];
-
 export const mockTrending = [
   { id: 1, topic: "Claude 4.5 Release", posts: "12.4K", trend: "up" as const },
   { id: 2, topic: "AI Regulation EU", posts: "8.7K", trend: "up" as const },

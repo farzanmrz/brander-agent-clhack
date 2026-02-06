@@ -2,21 +2,45 @@
 
 import Header from "@/components/Header";
 import Button from "@/components/ui/Button";
-import { mockRecentPosts, mockTrending } from "@/lib/mockData";
+import { mockTrending } from "@/lib/mockData";
 import {
+  ArrowRight,
   ArrowUpRight,
   Bird,
-  Eye,
-  Heart,
+  FileText,
+  Globe,
   Home,
-  Image as ImageIcon,
-  Repeat2,
+  Newspaper,
   Search,
   Sparkles,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
+const howItWorks = [
+  {
+    icon: <Search className="w-5 h-5" />,
+    title: "You pick a topic",
+    desc: "Type anything — AI, startups, climate. We take it from there.",
+  },
+  {
+    icon: <Globe className="w-5 h-5" />,
+    title: "We research the web",
+    desc: "Chirp scans news, articles, and X in real-time to find what's trending.",
+  },
+  {
+    icon: <FileText className="w-5 h-5" />,
+    title: "Choose your angle",
+    desc: "We surface specific angles so you control the narrative.",
+  },
+  {
+    icon: <Zap className="w-5 h-5" />,
+    title: "Post in one click",
+    desc: "Review AI-crafted variations and post your favorite instantly.",
+  },
+];
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -74,7 +98,6 @@ export default function DashboardPage() {
             </button>
           </div>
 
-          {/* Profile pill at bottom */}
           <div className="mt-auto mb-4">
             <div className="flex items-center gap-3 px-3 py-2 rounded-full hover:bg-gray-100 transition-colors duration-150 cursor-pointer">
               <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-sm shrink-0">
@@ -88,9 +111,8 @@ export default function DashboardPage() {
           </div>
         </aside>
 
-        {/* Main Feed */}
+        {/* Main Content */}
         <main className="flex-1 min-w-0 border-r border-gray-100 min-h-screen pt-14">
-          {/* Page header */}
           <div className="sticky top-14 bg-white/80 backdrop-blur-md z-40 px-4 py-3 border-b border-gray-100">
             <h1 className="text-lg font-bold text-gray-900">Home</h1>
           </div>
@@ -111,14 +133,9 @@ export default function DashboardPage() {
                   className="w-full text-lg placeholder:text-gray-500 outline-none py-2 bg-transparent"
                 />
                 <div className="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
-                  <div className="flex items-center gap-1">
-                    <button className="p-2 rounded-full hover:bg-green-50 text-green-600 transition-colors duration-150 cursor-pointer">
-                      <ImageIcon className="w-5 h-5" />
-                    </button>
-                    <button className="p-2 rounded-full hover:bg-green-50 text-green-600 transition-colors duration-150 cursor-pointer">
-                      <Sparkles className="w-5 h-5" />
-                    </button>
-                  </div>
+                  <p className="text-xs text-gray-400">
+                    We&apos;ll research trending angles for you
+                  </p>
                   <Button
                     onClick={handleFindTopics}
                     disabled={!query.trim()}
@@ -132,62 +149,66 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Feed */}
-          <div>
-            {mockRecentPosts.map((post) => (
-              <article
-                key={post.id}
-                className="px-4 py-3 border-b border-gray-100 hover:bg-gray-50/50 transition-colors duration-150 cursor-pointer"
-              >
-                <div className="flex gap-3">
-                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-bold text-sm shrink-0">
-                    U
+          {/* How Chirp Works */}
+          <div className="px-4 py-5 border-b border-gray-100">
+            <div className="flex items-center gap-2 mb-4">
+              <Newspaper className="w-4 h-4 text-green-600" />
+              <h2 className="text-sm font-bold text-gray-900">How Chirp works</h2>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {howItWorks.map((step, i) => (
+                <div
+                  key={step.title}
+                  className="flex gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors duration-150"
+                >
+                  <div className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-500 shrink-0">
+                    <span className="text-xs font-bold">{i + 1}</span>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="font-bold text-sm text-gray-900">User</span>
-                      <span className="text-sm text-gray-500">@yourhandle</span>
-                      <span className="text-gray-300">&middot;</span>
-                      <span className="text-sm text-gray-500">{post.postedAt}</span>
-                    </div>
-                    <p className="text-[15px] text-gray-900 leading-relaxed mt-0.5">
-                      {post.text}
-                    </p>
-                    <div className="flex items-center gap-6 mt-2.5 -ml-2">
-                      <button className="flex items-center gap-1.5 text-gray-500 hover:text-green-600 group transition-colors duration-150 cursor-pointer">
-                        <div className="p-1.5 rounded-full group-hover:bg-green-50 transition-colors duration-150">
-                          <Eye className="w-4 h-4" />
-                        </div>
-                        <span className="text-xs">{post.impressions.toLocaleString()}</span>
-                      </button>
-                      <button className="flex items-center gap-1.5 text-gray-500 hover:text-green-600 group transition-colors duration-150 cursor-pointer">
-                        <div className="p-1.5 rounded-full group-hover:bg-green-50 transition-colors duration-150">
-                          <Repeat2 className="w-4 h-4" />
-                        </div>
-                        <span className="text-xs">{post.reposts}</span>
-                      </button>
-                      <button className="flex items-center gap-1.5 text-gray-500 hover:text-pink-600 group transition-colors duration-150 cursor-pointer">
-                        <div className="p-1.5 rounded-full group-hover:bg-pink-50 transition-colors duration-150">
-                          <Heart className="w-4 h-4" />
-                        </div>
-                        <span className="text-xs">{post.likes}</span>
-                      </button>
-                    </div>
+                  <div>
+                    <p className="text-sm font-bold text-gray-900">{step.title}</p>
+                    <p className="text-xs text-gray-500 leading-relaxed mt-0.5">{step.desc}</p>
                   </div>
                 </div>
-              </article>
+              ))}
+            </div>
+          </div>
+
+          {/* Trending on X — research prompts */}
+          <div className="px-4 py-5">
+            <div className="flex items-center gap-2 mb-1">
+              <Globe className="w-4 h-4 text-green-600" />
+              <h2 className="text-sm font-bold text-gray-900">Happening now</h2>
+            </div>
+            <p className="text-xs text-gray-500 mb-4">
+              Tap any topic and we&apos;ll research it for you
+            </p>
+            {mockTrending.map((item) => (
+              <button
+                key={item.id}
+                onClick={() =>
+                  router.push(`/dashboard/topics?query=${encodeURIComponent(item.topic)}`)
+                }
+                className="w-full flex items-center justify-between py-3 border-b border-gray-50 last:border-0 hover:bg-gray-50 -mx-2 px-2 rounded-lg transition-colors duration-150 cursor-pointer group"
+              >
+                <div className="text-left">
+                  <p className="text-[15px] font-bold text-gray-900 group-hover:text-green-700 transition-colors duration-150">
+                    {item.topic}
+                  </p>
+                  <p className="text-xs text-gray-500">{item.posts} posts on X</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-green-600 transition-colors duration-150" />
+              </button>
             ))}
           </div>
         </main>
 
         {/* Right Sidebar */}
         <aside className="hidden md:block w-[350px] shrink-0 h-screen sticky top-0 pt-16 px-4 overflow-y-auto">
-          {/* Search */}
           <div className="mt-2 mb-4">
             <div className="flex items-center gap-3 bg-gray-100 rounded-full px-4 py-2.5">
               <Search className="w-4 h-4 text-gray-500 shrink-0" />
               <input
-                placeholder="Search topics"
+                placeholder="Search any topic"
                 className="bg-transparent outline-none text-sm placeholder:text-gray-500 w-full"
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
@@ -199,56 +220,62 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          {/* Trending */}
-          <div className="bg-gray-50 rounded-2xl overflow-hidden mb-4">
-            <h2 className="px-4 pt-3 pb-2 text-lg font-bold text-gray-900">Trending</h2>
-            {mockTrending.map((item, i) => (
-              <button
-                key={item.id}
-                onClick={() =>
-                  router.push(`/dashboard/topics?query=${encodeURIComponent(item.topic)}`)
-                }
-                className="w-full px-4 py-2.5 hover:bg-gray-100 transition-colors duration-150 cursor-pointer text-left"
-              >
-                <p className="text-xs text-gray-500">
-                  {i + 1} &middot; Trending
-                </p>
-                <p className="text-sm font-bold text-gray-900">{item.topic}</p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <p className="text-xs text-gray-500">{item.posts} posts</p>
-                  {item.trend === "up" && (
-                    <ArrowUpRight className="w-3 h-3 text-green-500" />
-                  )}
-                </div>
-              </button>
-            ))}
-            <button className="w-full px-4 py-3 text-left text-sm text-green-600 hover:bg-gray-100 transition-colors duration-150 cursor-pointer font-medium">
-              Show more
-            </button>
+          {/* What Chirp Does */}
+          <div className="bg-gray-50 rounded-2xl overflow-hidden mb-4 p-4">
+            <div className="flex items-center gap-2 mb-3">
+              <Bird className="w-5 h-5 text-green-600" />
+              <h2 className="text-sm font-bold text-gray-900">Chirp researches for you</h2>
+            </div>
+            <p className="text-xs text-gray-500 leading-relaxed mb-3">
+              Just enter a topic. Our AI agent scans the latest news, articles, and discussions across the web to find the most relevant angles — then crafts ready-to-post content in your voice.
+            </p>
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-xs text-gray-600">
+                <div className="w-1 h-1 rounded-full bg-green-500" />
+                Real-time web &amp; news research
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-600">
+                <div className="w-1 h-1 rounded-full bg-green-500" />
+                Multiple angles per topic
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-600">
+                <div className="w-1 h-1 rounded-full bg-green-500" />
+                You control the narrative
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-600">
+                <div className="w-1 h-1 rounded-full bg-green-500" />
+                Post to X in one click
+              </div>
+            </div>
           </div>
 
           {/* Quick Topics */}
-          <div className="bg-gray-50 rounded-2xl overflow-hidden">
-            <h2 className="px-4 pt-3 pb-2 text-lg font-bold text-gray-900">Quick topics</h2>
+          <div className="bg-gray-50 rounded-2xl overflow-hidden mb-4">
+            <h2 className="px-4 pt-3 pb-2 text-sm font-bold text-gray-900">Try a topic</h2>
             {[
               { emoji: "\u{1F916}", label: "Artificial Intelligence" },
               { emoji: "\u{1F30D}", label: "Climate Tech" },
               { emoji: "\u{1F680}", label: "Startups" },
+              { emoji: "\u26D3\uFE0F", label: "Web3 & Crypto" },
+              { emoji: "\u{1F3A8}", label: "Product Design" },
             ].map((t) => (
               <button
                 key={t.label}
                 onClick={() =>
                   router.push(`/dashboard/topics?query=${encodeURIComponent(t.label)}`)
                 }
-                className="w-full px-4 py-3 hover:bg-gray-100 transition-colors duration-150 cursor-pointer text-left flex items-center gap-3"
+                className="w-full px-4 py-2.5 hover:bg-gray-100 transition-colors duration-150 cursor-pointer text-left flex items-center justify-between group"
               >
-                <span className="text-lg">{t.emoji}</span>
-                <span className="text-sm font-medium text-gray-900">{t.label}</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-base">{t.emoji}</span>
+                  <span className="text-sm text-gray-900">{t.label}</span>
+                </div>
+                <ArrowUpRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-green-600 transition-colors duration-150" />
               </button>
             ))}
           </div>
 
-          <p className="text-xs text-gray-400 mt-4 px-2">
+          <p className="text-xs text-gray-400 px-2">
             Powered by Chirp AI
           </p>
         </aside>
