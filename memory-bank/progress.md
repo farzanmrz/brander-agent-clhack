@@ -1,50 +1,218 @@
-# Progress: BranderAgent
+# Progress: Chirp (BranderAgent)
 
-## Project Status: Sphere Query Generation Complete
-Phase 1: Setup & Initialization (Complete ✓)
-Phase 2: Core Implementation (In Progress - 1/14 features complete)
+## Project Status: Core Infrastructure Complete, Tweet Generation Next
+**Phase 1:** Setup & Initialization (Complete ✓)  
+**Phase 2:** Core Implementation (In Progress - Major milestones complete)  
+**Phase 3:** Integration & Polish (Upcoming)
 
 ## Completed Milestones
+
+### Setup & Infrastructure (Complete ✓)
 - [x] Create project directory and initialize git repo
 - [x] Create README.md with all sections
 - [x] Create MIT LICENSE file
-- [x] Create remote GitHub repo and link as origin
+- [x] Create remote GitHub repo `farzanmrz/brander-agent-clhack` and link as origin
 - [x] Commit and push initial setup to main
 - [x] Initialize Memory Bank (6 core files)
 - [x] Create conda environment `hackenv` (Python 3.11.14)
 - [x] Install all required packages (fastapi, uvicorn, google-genai, composio-core, youdotcom, python-dotenv, jinja2, aiohttp)
 - [x] Generate `environment.yml` for reproducibility
-- [x] Commit and push environment setup (commit `9bfc091`)
-- [x] **Feature: Sphere Query Generation (commit `8d2b6f0`)**
+
+### Backend Services & APIs (Complete ✓)
+- [x] **Gemini Integration (Sphere Query Generation)**
   - [x] Create `.env.example` template for API keys
   - [x] Implement `app/services/gemini_service.py` with `generate_sphere_queries()`
+  - [x] Use structured output with Pydantic models + `GenerateContentConfig`
+  - [x] Configure Gemini API with `gemini-3-pro-preview` model
   - [x] Create test script `app/scripts/test_sphere_queries.py`
-  - [x] Configure Gemini API with `gemini-3-pro` model
   - [x] Test and verify end-to-end functionality
-  - [x] Merge `ft/sphere-setup` into main
+  - [x] Create `app/routers/sphere.py` with `/api/sphere/queries` endpoint
+
+- [x] **You.com Integration** (by teammates)
+  - [x] Implement `app/services/ydc_service.py` with Search + Live News APIs
+  - [x] Create `search_web()` and `search_web_slim()` functions
+  - [x] Create `app/routers/search.py` with `/api/search` endpoints
+  - [x] Create test script `app/scripts/search.py`
+
+- [x] **Composio/Twitter Integration** (by teammates)
+  - [x] Implement `app/services/composio_service.py` with Twitter posting
+  - [x] Configure default user ID for Twitter account
+  - [x] Create `app/routers/tweet.py` with `/api/tweet` POST endpoint
+
+- [x] **FastAPI App Structure**
+  - [x] Create `main.py` with all 3 routers (search, sphere, tweet)
+  - [x] Configure static file serving for React build
+  - [x] Create `run.py` entrypoint script
+
+### Frontend Application (Complete ✓) (by teammates)
+- [x] **Next.js 16 Setup**
+  - [x] Initialize Next.js with App Router
+  - [x] Configure TypeScript (strict mode)
+  - [x] Setup Tailwind CSS v4
+  - [x] Install lucide-react for icons
+  - [x] Configure package.json and next.config.ts
+
+- [x] **Pages & Routing**
+  - [x] Landing page (`/`) with Google sign-in placeholder
+  - [x] Dashboard page (`/dashboard`) with topic input
+  - [x] Topics selection page (`/dashboard/topics`)
+  - [x] Posts variation page (`/dashboard/posts`)
+  - [x] Preview & post page (`/dashboard/preview`)
+
+- [x] **Components**
+  - [x] UI primitives (Button, Input, Card)
+  - [x] Header with logo and user dropdown
+  - [x] TopicCard for topic selection
+  - [x] PostCard for post variations
+  - [x] LoadingState with spinner
+  - [x] GoogleSignIn button
+
+- [x] **Branding & Design**
+  - [x] "Chirp" brand name and bird logo
+  - [x] YC-style minimal design system
+  - [x] Green accent color (#10B981)
+  - [x] Inter font integration
+  - [x] Mobile-responsive layouts
+
+### Deployment & Infrastructure (Complete ✓) (by teammates)
+- [x] Create `Dockerfile` for Python backend
+- [x] Create `docker-compose.yml` for local development
+- [x] Create `render.yaml` deployment blueprint
+- [x] Create `chirp-project-guide.md` comprehensive guide
+- [x] Setup static file serving in FastAPI
+
+### Documentation (Complete ✓)
+- [x] **Memory Bank Update (Current Session)**
+  - [x] Create feature branch `ft/memory-bank-update`
+  - [x] Update `projectbrief.md` with Chirp branding and current status
+  - [x] Update `productContext.md` with full user flow
+  - [x] Update `activeContext.md` with complete project state
+  - [x] Update `systemPatterns.md` with Next.js architecture
+  - [x] Update `techContext.md` with all dependencies and APIs
+  - [x] Update `progress.md` (this file)
 
 ## Current Task
-- [ ] Integrate You.com APIs (Search + Live News)
+**Implement Gemini tweet generation from articles** (NEXT)
 
-## Upcoming Tasks (Priority Order - Revised Flow)
-- [ ] You.com Integration (Search + Live News APIs) - 5 queries × ~10 results each
-- [ ] Initialize FastAPI app and folder structure (main.py, routers, models)
-- [ ] Database schema definition (SQLite) - spheres, queries, sources, drafts, feedback
-- [ ] Twitter OAuth implementation via Composio
-- [ ] Sphere creation endpoint (free-text description input)
-- [ ] Query review UI (display + optional editing)
-- [ ] Source selection UI (checklist of results grouped by query)
-- [ ] Gemini tweet drafting (based on selected sources + feedback)
-- [ ] Draft review UI (approve/edit/reject)
-- [ ] Tweet posting via Composio
-- [ ] Feedback loop storage (drafts, query tweaks, source selections)
-- [ ] Deployment to Render
+## Upcoming Tasks (Priority Order)
 
-## Stretch Goals
+### Immediate (Next Task)
+- [ ] **Tweet Generation from Articles**
+  - [ ] Create `generate_tweet_from_articles()` function in `gemini_service.py`
+  - [ ] Define Pydantic model for article input (title, url, description)
+  - [ ] Define Pydantic model for tweet output (text, char count)
+  - [ ] Implement RAG pattern: 5 articles as knowledge base → unique tweet
+  - [ ] Create endpoint in router (sphere.py or new router)
+  - [ ] Test with real You.com search results
+  - [ ] Validate tweet length (max 280 chars)
+
+### Integration Phase
+- [ ] Connect frontend to real API endpoints (replace mock data)
+- [ ] Build source selection UI (checklist of You.com results per query)
+- [ ] Wire up tweet generation flow (selected articles → Gemini → draft)
+- [ ] Connect draft review to Composio posting
+- [ ] End-to-end testing
+
+### Feedback Loop (Stretch Goal)
+- [ ] Define SQLite schema (spheres, queries, sources, drafts, feedback)
+- [ ] Implement feedback storage (approved/edited/rejected drafts)
+- [ ] Store query tweaks and source selections
+- [ ] Update Gemini prompts to include past feedback (few-shot learning)
+
+### Deployment
+- [ ] Build Next.js frontend for production
+- [ ] Copy build to `static/` directory
+- [ ] Test Docker build locally
+- [ ] Deploy to Render
+- [ ] Configure environment variables in Render dashboard
+- [ ] Test deployed application
+
+## Stretch Goals (If Time Permits)
 - [ ] Reply-to-tweets feature (search for existing tweets to reply to)
+- [ ] Model-agnostic architecture (support multiple LLMs)
+- [ ] Advanced feedback visualization
+- [ ] Tweet scheduling
 
 ## Known Issues & Constraints
-- Current time: 11:34 AM PT (~4 hours remaining until 4:30 PM cutoff).
-- Team of 4 developers, need to coordinate work distribution.
-- MVP UI: Keep query editing and source filtering simple (checklists, text inputs).
-- Sphere query generation complete; next priority is You.com integration.
+- **Current time:** 12:51 PM PT (~3.65 hours remaining until 4:30 PM cutoff)
+- **Team:** 4 developers, good progress so far
+- **Frontend:** Already polished and complete (teammates did great work)
+- **Backend:** Core services complete, focus on tweet generation logic
+- **Priority:** Working end-to-end demo for judges
+
+## Key Decisions & Evolution
+- **Branding:** Renamed from "BranderAgent" to "Chirp"
+- **Frontend:** Upgraded from static HTML to full Next.js + TypeScript app
+- **Gemini:** Using `gemini-3-pro-preview` with structured output (Pydantic)
+- **Architecture:** Clean separation between Next.js frontend and FastAPI backend
+- **Deployment:** Full Docker + Render setup with auto-deploy
+
+## Next Implementation Details
+
+### Tweet Generation Function Spec
+```python
+# app/services/gemini_service.py
+
+class Article(BaseModel):
+    title: str
+    url: str
+    description: str
+
+class GeneratedTweet(BaseModel):
+    text: str
+    char_count: int
+    sources_used: List[str]  # URLs of articles used
+
+def generate_tweet_from_articles(
+    articles: List[Article],
+    sphere_description: str,
+    user_preferences: Optional[dict] = None
+) -> GeneratedTweet:
+    """
+    Generate a unique tweet from 5 articles using RAG pattern.
+    
+    Args:
+        articles: List of 5 article objects with title, url, description
+        sphere_description: Original sphere description for context
+        user_preferences: Optional past feedback for few-shot learning
+        
+    Returns:
+        GeneratedTweet with text (max 280 chars) and metadata
+    """
+    # Implementation using Gemini structured output
+    # Combines information from all/some articles
+    # Returns tweet optimized for Twitter
+```
+
+### API Endpoint Spec
+```python
+# POST /api/sphere/generate-tweet or /api/tweet/generate
+# Body:
+{
+  "articles": [
+    {"title": "...", "url": "...", "description": "..."},
+    // ... 5 articles total
+  ],
+  "sphere_description": "...",
+  "user_preferences": {...}  // optional
+}
+
+# Response:
+{
+  "text": "Generated tweet text here",
+  "char_count": 247,
+  "sources_used": ["url1", "url2"]
+}
+```
+
+## Success Criteria for Demo
+1. ✅ User can input sphere description
+2. ✅ Gemini generates 5 search queries
+3. ✅ You.com returns relevant articles
+4. ⏳ User can select articles as sources
+5. ⏳ Gemini generates tweet from selected articles
+6. ⏳ User can review and approve tweet
+7. ✅ Tweet posts to Twitter/X via Composio
+8. ⏳ End-to-end flow works smoothly
+
+**Progress:** 4/8 core features complete (50%)
