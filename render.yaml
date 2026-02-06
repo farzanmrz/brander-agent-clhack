@@ -1,17 +1,17 @@
-# Render blueprint: one web service, backend on $PORT, serves React build from /
+# Single Render instance: one link serves frontend; API at /api on same origin (not exposed separately).
+# Deploy: Dashboard > New > Blueprint > connect repo. Set GOOGLE_API_KEY, YDC_API_KEY, COMPOSIO_API_KEY when prompted.
+
 services:
   - type: web
     name: brander-agent
-    runtime: python
+    runtime: docker
     plan: free
-
-    buildCommand: |
-      pip install -r requirements.txt
-      if [ -d frontend ] && [ -f frontend/package.json ]; then
-        cd frontend && npm install && npm run build
-        mkdir -p ../static
-        if [ -d build ]; then cp -r build/. ../static; else cp -r dist/. ../static; fi
-        cd ..
-      fi
-
-    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    envVars:
+      - key: GOOGLE_API_KEY
+        sync: false
+      - key: YDC_API_KEY
+        sync: false
+      - key: COMPOSIO_API_KEY
+        sync: false

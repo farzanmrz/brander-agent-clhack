@@ -1,9 +1,9 @@
 # Progress: Chirp (BranderAgent)
 
-## Project Status: Core Infrastructure Complete, Tweet Generation Next
+## Project Status: UI & Core Services Complete, Auth & DB Next
 **Phase 1:** Setup & Initialization (Complete ✓)  
-**Phase 2:** Core Implementation (In Progress - Major milestones complete)  
-**Phase 3:** Integration & Polish (Upcoming)
+**Phase 2:** Core Implementation (Complete ✓)  
+**Phase 3:** Auth, DB & Integration (In Progress)
 
 ## Completed Milestones
 
@@ -44,35 +44,29 @@
   - [x] Configure static file serving for React build
   - [x] Create `run.py` entrypoint script
 
-### Frontend Application (Complete ✓) (by teammates)
+### Frontend Application (Complete ✓)
 - [x] **Next.js 16 Setup**
   - [x] Initialize Next.js with App Router
   - [x] Configure TypeScript (strict mode)
   - [x] Setup Tailwind CSS v4
   - [x] Install lucide-react for icons
-  - [x] Configure package.json and next.config.ts
 
 - [x] **Pages & Routing**
-  - [x] Landing page (`/`) with Google sign-in placeholder
-  - [x] Dashboard page (`/dashboard`) with topic input
+  - [x] Landing page (`/`) with Neobrutalism design
+  - [x] Dashboard page (`/dashboard`)
   - [x] Topics selection page (`/dashboard/topics`)
   - [x] Posts variation page (`/dashboard/posts`)
   - [x] Preview & post page (`/dashboard/preview`)
 
 - [x] **Components**
-  - [x] UI primitives (Button, Input, Card)
-  - [x] Header with logo and user dropdown
-  - [x] TopicCard for topic selection
-  - [x] PostCard for post variations
-  - [x] LoadingState with spinner
-  - [x] GoogleSignIn button
+  - [x] Neobrutalism UI primitives (Button, Input, Card)
+  - [x] Header, TopicCard, PostCard, LoadingState
+  - [x] GoogleSignIn button (Supabase ready)
 
 - [x] **Branding & Design**
   - [x] "Chirp" brand name and bird logo
-  - [x] YC-style minimal design system
-  - [x] Green accent color (#10B981)
-  - [x] Inter font integration
-  - [x] Mobile-responsive layouts
+  - [x] Neobrutalism design system (Cream/Lime/Pink/Sky/Lavender)
+  - [x] High-contrast borders and shadows
 
 ### Deployment & Infrastructure (Complete ✓) (by teammates)
 - [x] Create `Dockerfile` for Python backend
@@ -92,26 +86,26 @@
   - [x] Update `progress.md` (this file)
 
 ## Current Task
-**Implement Gemini tweet generation from articles** (NEXT)
+**Implement Supabase Auth & X/Twitter Integration**
 
 ## Upcoming Tasks (Priority Order)
 
 ### Immediate (Next Task)
-- [ ] **Tweet Generation from Articles**
-  - [ ] Create `generate_tweet_from_articles()` function in `gemini_service.py`
-  - [ ] Define Pydantic model for article input (title, url, description)
-  - [ ] Define Pydantic model for tweet output (text, char count)
-  - [ ] Implement RAG pattern: 5 articles as knowledge base → unique tweet
-  - [ ] Create endpoint in router (sphere.py or new router)
-  - [ ] Test with real You.com search results
-  - [ ] Validate tweet length (max 280 chars)
+- [ ] **Supabase Auth & User Data**
+  - [ ] Configure Supabase project with Google/X Auth
+  - [ ] Implement user session management in Next.js
+  - [ ] Create `users` and `spheres` tables in Supabase
+  - [ ] Store user preferences and sphere data
 
 ### Integration Phase
-- [ ] Connect frontend to real API endpoints (replace mock data)
-- [ ] Build source selection UI (checklist of You.com results per query)
-- [ ] Wire up tweet generation flow (selected articles → Gemini → draft)
-- [ ] Connect draft review to Composio posting
-- [ ] End-to-end testing
+- [ ] **X/Twitter Auth via Composio**
+  - [ ] Implement X/Twitter login flow
+  - [ ] Connect user's X account to Composio
+  - [ ] Store Composio connection ID in Supabase
+- [ ] **End-to-End Flow**
+  - [ ] Connect frontend to real API endpoints
+  - [ ] Implement state persistence across the flow
+  - [ ] Final end-to-end testing
 
 ### Feedback Loop (Stretch Goal)
 - [ ] Define SQLite schema (spheres, queries, sources, drafts, feedback)

@@ -1,9 +1,9 @@
 # System Patterns: Chirp (BranderAgent)
 
 ## Architecture Overview
-- **Frontend:** Next.js 16 (App Router) + TypeScript + Tailwind CSS - YC-style minimal design
+- **Frontend:** Next.js 16 (App Router) + TypeScript + Tailwind CSS v4 - Neobrutalism design
 - **Backend:** FastAPI (Python) - Handles API orchestration, serves static frontend build
-- **Database:** SQLite - Stores "spheres," drafts, and user feedback loop data (planned)
+- **Database:** Supabase (PostgreSQL) + SQLite (local feedback loop)
 - **Orchestration:** Plain Python functions. No heavy agent frameworks (LangChain, etc.) to keep it simple and debuggable during the hackathon.
 
 ## Tech Stack
@@ -42,12 +42,12 @@
 - **Config:** `render.yaml` blueprint for automated deployment
 
 ## Key Technical Decisions
+- **Neobrutalism Design:** High-contrast, bold borders, and vibrant colors (Cream/Lime/Pink/Sky/Lavender).
+- **Backend Duplication:** **DO NOT CLEAN UP.** The duplicate structure in `backend/` (`backend/app/`, `backend/app/backend-app/`) is intentional and must be preserved.
 - **No Agent Frameworks:** Direct API calls to You.com, Composio, and Gemini. Avoids abstraction overhead.
-- **Structured Output:** Pydantic models + `GenerateContentConfig` for type-safe Gemini responses
-- **RAG + Few-Shot Prompting:** Gemini drafts tweets using real-time snippets (selected You.com results) and past feedback (SQLite) as context.
-- **SQLite for Learning:** Every user action (Approve/Edit/Reject drafts, query tweaks, source selections) is recorded to build a personalized dataset for each sphere.
+- **Structured Output:** Pydantic models + `GenerateContentConfig` for type-safe Gemini responses.
+- **Supabase for Auth & DB:** Using Supabase for user authentication and persistent storage.
 - **FastAPI as File Server:** Serves the Next.js build directly to simplify deployment on Render.
-- **Frontend-first:** Next.js handles routing and UI, backend is purely API
 
 ## API Integration Patterns
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { apiUrl } from "@/lib/api";
 import Header from "@/components/Header";
 import LoadingState from "@/components/LoadingState";
 import TopicCard from "@/components/TopicCard";
@@ -32,7 +33,7 @@ function TopicsContent() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/sphere/queries", {
+      const res = await fetch(apiUrl("/api/sphere/queries"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ description: query.trim() }),

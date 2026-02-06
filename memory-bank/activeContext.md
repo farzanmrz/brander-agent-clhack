@@ -1,25 +1,21 @@
 # Active Context: Chirp (BranderAgent)
 
 ## Current Focus
-**Major project evolution complete.** The team has built out the full frontend (Next.js) and backend infrastructure (FastAPI with all services and routers). Current state:
-- ✅ Sphere query generation (Gemini structured output)
-- ✅ You.com search integration
-- ✅ Composio Twitter posting
-- ✅ Next.js frontend with YC-style design
-- ✅ Complete deployment setup
+**Core infrastructure and UI complete.** The project has transitioned to a high-fidelity Neobrutalism design. Backend services for search, query generation, and tweet posting are functional.
+- ✅ Neobrutalism UI (Cream/Lime/Pink/Sky/Lavender palette)
+- ✅ Gemini structured output for queries and tweets
+- ✅ You.com search and content fetching
+- ✅ Composio Twitter integration
+- ✅ Supabase Auth & Client/Server setup (initial)
 
-**Next task:** Implement Gemini tweet generation endpoint that takes 5 articles' content per query as a knowledge base and produces a unique tweet combining information from all/some of them.
+**Next task:** Implement full backend integration with Supabase for user data and X/Twitter authentication flow.
 
 ## Recent Changes (Since Last Update)
-- **Frontend added by teammates:** Complete Next.js 16 + TypeScript + Tailwind CSS application with:
-  - Landing page with Google sign-in placeholder
-  - Dashboard with topic input and quick starts
-  - Topics selection page with card-based UI
-  - Posts variation page with 3 angle options
-  - Preview & post page with confirmation flow
-  - Reusable components (Button, Input, Card, Header, TopicCard, PostCard, LoadingState, GoogleSignIn)
-  - Mock data for demonstration
-  - Branded as "Chirp" with bird logo and green accents
+- **Neobrutalism Design System:** Implemented across all frontend components with `neo-border`, `neo-shadow`, and `neo-press` effects.
+- **Supabase Integration:** Added `@supabase/ssr` and `@supabase/supabase-js`. Created client/server utilities in `src/lib/supabase/`.
+- **Auth Callback:** Implemented `src/app/auth/callback/route.ts` for handling Supabase auth redirects.
+- **Tweet Generation Logic:** Implemented `generate_tweet_per_query` and `generate_tweets_from_queries` in `gemini_service.py` using long-context patterns.
+- **Backend Structure:** Note that `backend/` contains duplicate structures (`backend/app/`, `backend/app/backend-app/`). **CRITICAL: Do not clean up or remove these duplicates.**
   
 - **Backend services added by teammates:**
   - `ydc_service.py` — You.com Search + Live News API integration
@@ -59,13 +55,12 @@
 7. Deploy to Render
 
 ## Active Decisions
-- **Chirp branding:** Project now branded as "Chirp" with YC-style design
-- **Frontend:** Next.js 16 + TypeScript + Tailwind (not static HTML)
-- **Gemini model:** Using `gemini-3-pro-preview` (not `gemini-3-pro`)
-- **Structured output:** Using Pydantic models + `GenerateContentConfig` for type-safe responses
-- **Tweet generation pattern:** RAG-based, using 5 articles as knowledge base per query
-- **Priority:** Working demo over UI polish, but frontend is already polished
-- **No agent frameworks:** Plain Python functions for orchestration
+- **Chirp branding:** Project branded as "Chirp" with Neobrutalism design.
+- **Frontend:** Next.js 16 + TypeScript + Tailwind v4.
+- **Gemini model:** Using `gemini-3-pro-preview` with structured output.
+- **Backend Duplication:** Explicit decision to **KEEP** the duplicate directory structure in `backend/`. Do not attempt to streamline or remove `backend/app/` or `backend/app/backend-app/`.
+- **Auth Strategy:** Moving towards Supabase for user management and X/Twitter connection.
+- **No agent frameworks:** Maintaining simple Python orchestration for speed and reliability.
 
 ## Team Structure
 - 4 developers total (Farzan + 3 teammates)

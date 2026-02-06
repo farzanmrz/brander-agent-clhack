@@ -37,10 +37,13 @@ AI-powered personal branding agent for Twitter/X. Define your brand "spheres" vi
 ## Run / Deploy
 
 - **Local (one command):** `python run.py` — backend on port 3000 (or set `PORT`).
-- **Docker:** Build frontend first, then run:
+- **Docker (backend + frontend):** Runs backend on 3000 and Next.js dev server on 3001.
   ```bash
-  # Optional: build React into static/ for serving in the image
-  [ -d frontend ] && (cd frontend && npm run build && cp -r build ../static 2>/dev/null || cp -r dist ../static)
+  docker-compose up
+  ```
+  Then open http://localhost:3000 for the app; the API is at http://localhost:3001 (and /api is proxied from the app).
+- **Docker (backend only):** Build and run the API (and optional pre-built static):
+  ```bash
   docker build -t brander-agent . && docker run -p 3000:3000 brander-agent
   ```
 - **Render:** Use the repo’s `render.yaml` (Blueprint). Build runs `pip install`, builds the React app into `static/`, then start runs `uvicorn main:app --host 0.0.0.0 --port $PORT`. Set env vars (e.g. `YOUCOM_API_KEY`, `COMPOSIO_API_KEY`, `GOOGLE_API_KEY`) in the Render dashboard.
