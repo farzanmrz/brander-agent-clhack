@@ -10,8 +10,8 @@ services:
       if [ -d frontend ] && [ -f frontend/package.json ]; then
         cd frontend && npm install && npm run build
         mkdir -p ../static
-        cp -r build ../static 2>/dev/null || cp -r dist ../static
+        if [ -d build ]; then cp -r build/. ../static; else cp -r dist/. ../static; fi
         cd ..
       fi
 
-    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
