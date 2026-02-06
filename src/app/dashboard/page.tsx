@@ -1,6 +1,7 @@
 "use client";
 
 import Header from "@/components/Header";
+import TweetCarousel from "@/components/TweetCarousel";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
 import { useRouter } from "next/navigation";
@@ -72,6 +73,8 @@ export default function DashboardPage() {
             ))}
           </div>
         </div>
+
+        <TweetCarousel />
       </main>
     </div>
   );

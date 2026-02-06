@@ -10,6 +10,18 @@ interface PostCardProps {
   onSelect: () => void;
 }
 
+const toneBadgeColor: Record<string, string> = {
+  "Technical Take": "bg-sky",
+  Contrarian: "bg-pink",
+  Funny: "bg-peach",
+};
+
+const toneEmoji: Record<string, string> = {
+  "Technical Take": "🔬",
+  Contrarian: "🔥",
+  Funny: "😂",
+};
+
 export default function PostCard({
   angle,
   text,
@@ -22,6 +34,9 @@ export default function PostCard({
     '<span class="text-black underline decoration-2 underline-offset-2">$1</span>'
   );
 
+  const badgeColor = toneBadgeColor[angle] || "bg-lavender";
+  const emoji = toneEmoji[angle] || "✍️";
+
   return (
     <div
       className={cn(
@@ -31,8 +46,13 @@ export default function PostCard({
           : "bg-white neo-shadow"
       )}
     >
-      <span className="inline-block bg-lavender neo-border rounded-md px-2 py-1 text-xs font-bold text-black uppercase tracking-wide mb-3 self-start">
-        {angle}
+      <span
+        className={cn(
+          "inline-block neo-border rounded-md px-3 py-1.5 text-xs font-bold text-black uppercase tracking-wide mb-3 self-start",
+          badgeColor
+        )}
+      >
+        {emoji} {angle}
       </span>
       <p
         className="text-base leading-relaxed text-black mb-4 flex-1"

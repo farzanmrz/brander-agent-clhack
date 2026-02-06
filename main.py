@@ -24,9 +24,11 @@ def health():
 from backend.routers.search import router as search_router
 from backend.routers.sphere import router as sphere_router
 from backend.routers.tweet import router as tweet_router
+from backend.routers.profile import router as profile_router
 app.include_router(search_router)
 app.include_router(sphere_router)
 app.include_router(tweet_router)
+app.include_router(profile_router)
 
 # Serve React build when present; SPA fallback for client-side routing
 static_dir = Path(__file__).resolve().parent / "static"

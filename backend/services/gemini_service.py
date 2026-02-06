@@ -5,7 +5,9 @@ This service uses Google Gemini to generate search queries from sphere descripti
 and to draft tweets based on researched content.
 """
 
+import json
 import os
+from pathlib import Path
 from typing import List
 from pydantic import BaseModel
 from google import genai
@@ -14,6 +16,57 @@ from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
+
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+BRAND_GUIDELINES_PATH = DATA_DIR / "brand_guidelines.json"
+
+
+def _load_brand_guidelines() -> str:
+    """Load brand_guidelines.json and format as a prompt-ready string."""
+    try:
+        with open(BRAND_GUIDELINES_PATH, "r") as f:
+            guidelines = json.load(f)
+
+        identity = guidelines["identity"]
+        voice = guidelines["voice"]
+        pillars = guidelines["content_pillars"]
+        style = guidelines["style_patterns"]
+        do_not = guidelines["do_not"]
+
+        sections = [
+            f"Author: {identity['name']} ({identity['handle']})",
+            f"Role: {identity['role']}",
+            f"Audience: {identity['audience']}",
+            f"Niche: {identity['niche']}",
+            "",
+            f"Tone: {', '.join(voice['tone'])}",
+            f"Personality: {voice['personality']}",
+            "",
+            "Voice rules:",
+        ]
+        for rule in voice["rules"]:
+            sections.append(f"  - {rule}")
+
+        sections.append("")
+        sections.append("Content pillars:")
+        for p in pillars:
+            sections.append(f"  [{p['pillar']}] {p['description']}")
+            sections.append(f'    Example: "{p["example"]}"')
+
+        sections.append("")
+        sections.append(f"Sentence structure: {style['sentence_structure']}")
+        sections.append(f"Formatting: {style['formatting']}")
+        sections.append(f"Length: {style['length']}")
+        sections.append(f"Vocabulary: {', '.join(style['vocabulary'])}")
+
+        sections.append("")
+        sections.append("DO NOT:")
+        for d in do_not:
+            sections.append(f"  - {d}")
+
+        return "\n".join(sections)
+    except Exception:
+        return ""
 
 
 class SphereQueries(BaseModel):
@@ -36,6 +89,17 @@ class GeneratedTweet(BaseModel):
 class TweetGenerationResponse(BaseModel):
     """Response model for multiple generated tweets."""
     tweets: List[GeneratedTweet]
+
+
+class StyledTweet(BaseModel):
+    """A tweet with a specific tone/style."""
+    tone: str
+    tweet: str
+
+
+class StyledTweetsResponse(BaseModel):
+    """Response model for 3 styled tweets."""
+    tweets: List[StyledTweet]
 
 
 def generate_sphere_queries(description: str) -> List[str]:
@@ -190,3 +254,68 @@ def generate_tweets_from_queries(queries: List[QueryContent], sphere_description
         tweets.append(tweet)
     
     return TweetGenerationResponse(tweets=tweets)
+
+
+def generate_styled_tweets(queries: List[QueryContent], sphere_description: str) -> StyledTweetsResponse:
+    """
+    Generate exactly 3 tweets with distinct tones from combined article content.
+    
+    Tones: Technical Take, Contrarian, Funny
+    
+    Args:
+        queries: List of QueryContent objects (query + article content)
+        sphere_description: Original user's brand sphere description
+        
+    Returns:
+        StyledTweetsResponse with exactly 3 styled tweets
+    """
+    api_key = os.getenv("GOOGLE_API_KEY")
+    if not api_key:
+        raise ValueError("GOOGLE_API_KEY not found in environment variables")
+    
+    client = genai.Client(api_key=api_key)
+    
+    # Combine all article content
+    combined_content = ""
+    for q in queries:
+        combined_content += f"\n--- Articles for: {q.query} ---\n{q.content}\n"
+    
+    brand_guidelines = _load_brand_guidelines()
+
+    prompt = f"""<ARTICLE CONTENT>
+{combined_content}
+</ARTICLE CONTENT>
+
+<BRAND GUIDELINES>
+{brand_guidelines}
+</BRAND GUIDELINES>
+
+You are a Twitter/X content strategist. The user's brand sphere is: "{sphere_description}"
+
+Follow the BRAND GUIDELINES above exactly — match the author's tone, sentence structure, vocabulary, and formatting rules. Respect every DO NOT rule. The generated tweets must sound like they were written by this person.
+
+Based on ALL the article content above, draft exactly 3 tweets (max 280 characters each), each with a DIFFERENT tone:
+
+1. **Technical Take** — Insightful, data-driven, focuses on specific tools/numbers/facts from the articles. Shows expertise.
+2. **Contrarian** — Challenges the mainstream narrative. A bold, provocative take that makes people stop and think. 
+3. **Funny** — Witty, relatable humor about the topic. Uses irony, absurdity, or self-deprecation. Should make people laugh AND think.
+
+Requirements for ALL tweets:
+- Grounded in the actual article content (not hallucinated)
+- Aligned with the user's brand sphere
+- Natural language (no hashtag spam, max 1 hashtag if it adds value)
+- Each tweet must be distinct in both content and voice
+
+Return as JSON with a "tweets" array where each item has "tone" (exactly one of: "Technical Take", "Contrarian", "Funny") and "tweet" fields."""
+    
+    response = client.models.generate_content(
+        model='gemini-3-pro-preview',
+        contents=prompt,
+        config=types.GenerateContentConfig(
+            response_mime_type='application/json',
+            response_schema=StyledTweetsResponse
+        )
+    )
+    
+    result = StyledTweetsResponse.model_validate_json(response.text)
+    return result
