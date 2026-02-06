@@ -56,50 +56,6 @@ GOOGLE_API_KEY=your_google_gemini_api_key
 DATABASE_URL=sqlite:///./brander.db
 ```
 
-### 3. Run the App (Coming Soon)
-
-```bash
-uvicorn main:app --reload
-```
-
-Open http://localhost:8000
-
----
-
-## Project Structure (To Be Created)
-
-```
-brander-agent-clhack/
-├── main.py                  # FastAPI app entry point
-├── routers/                 # API endpoints
-│   ├── auth.py              # Twitter OAuth via Composio
-│   ├── spheres.py           # Sphere CRUD
-│   ├── queries.py           # Query generation & review
-│   ├── sources.py           # You.com search & source selection
-│   ├── drafts.py            # Tweet drafting & review
-│   └── posts.py             # Tweet posting via Composio
-├── models/                  # SQLAlchemy models
-│   ├── sphere.py
-│   ├── query.py
-│   ├── source.py
-│   ├── draft.py
-│   └── feedback.py
-├── services/                # Business logic
-│   ├── gemini_service.py    # Query generation, tweet drafting
-│   ├── youcom_service.py    # You.com API integration
-│   └── composio_service.py  # Composio Twitter integration
-├── static/                  # Frontend files
-│   ├── index.html
-│   ├── style.css
-│   └── app.js
-├── database.py              # SQLite setup
-├── .env                     # API keys (gitignored)
-├── environment.yml          # Conda environment spec
-└── memory-bank/             # Project documentation
-```
-
----
-
 ## Development Tasks
 
 **Phase 1: Setup (Complete ✓)**
