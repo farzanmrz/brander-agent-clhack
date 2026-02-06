@@ -1,4 +1,4 @@
-# Project Brief: BranderAgent (Chirp)
+# Project Brief: Chirp (BranderAgent)
 
 ## Situation
 - **Team:** 4 developers (Farzan + 3 team members)
@@ -21,12 +21,14 @@
 - ✅ Gemini generates 5 focused search queries per sphere (structured output)
 - ✅ Content discovery via You.com (Search API + Live News API)
 - ✅ Tweet posting via Composio (Twitter integration)
-- ✅ Next.js frontend with YC-style minimal design
+- ✅ Next.js frontend with Neobrutalism design system
 - ✅ FastAPI backend with 3 routers (search, sphere, tweet)
 - ✅ Full deployment setup (Dockerfile, docker-compose, render.yaml)
+- ✅ Intentional backend duplication (DO NOT CLEAN UP)
 
 ## In Progress
-- Tweet drafting using Gemini with RAG (selected You.com results as knowledge base)
+- Supabase Auth & Database integration
+- X/Twitter authentication flow
 
 ## Remaining Work
 - User query review and source selection UI
