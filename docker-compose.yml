@@ -1,11 +1,22 @@
-# Run backend: python -m uvicorn main:app --host 0.0.0.0 --port 3000
-# With frontend: build frontend into static/ first, or add a frontend service that outputs to static.
+# Backend on 3000, frontend dev server on 3001. Run: docker-compose up
 services:
-  web:
-    build: .
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "3000:3000"
     environment:
       - PORT=3000
-    # Override so we always use port from env (Render sets PORT)
-    command: ["sh", "-c", "python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-3000}"]
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "3001:3001"
+    environment:
+      # Next rewrites /api/* to backend; from container use service name
+      - API_URL=http://backend:3000
+    depends_on:
+      - backend
