@@ -1,0 +1,17 @@
+# Render blueprint: one web service, backend on $PORT, serves React build from /
+services:
+  - type: web
+    name: brander-agent
+    runtime: python
+    plan: free
+
+    buildCommand: |
+      pip install -r requirements.txt
+      if [ -d frontend ] && [ -f frontend/package.json ]; then
+        cd frontend && npm install && npm run build
+        mkdir -p ../static
+        cp -r build ../static 2>/dev/null || cp -r dist ../static
+        cd ..
+      fi
+
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
