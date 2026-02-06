@@ -18,19 +18,29 @@ Phase 2: Core Implementation (Ready to Begin)
 
 ## Current Task
 - [ ] Create `.env.example` template for API keys
+- [ ] Update README.md to reflect revised project flow
 
-## Upcoming Tasks (Priority Order)
-- [ ] Initialize FastAPI app and folder structure
-- [ ] Database schema definition (SQLite)
-- [ ] Sphere management API/UI
-- [ ] You.com Integration (Search/News)
-- [ ] Composio Integration (Twitter)
-- [ ] Gemini Integration (Ranking/Drafting)
-- [ ] Feedback Loop implementation
-- [ ] Web UI (Spheres, Draft Review)
+## Upcoming Tasks (Priority Order - Revised Flow)
+- [ ] Initialize FastAPI app and folder structure (main.py, routers, models)
+- [ ] Database schema definition (SQLite) - spheres, queries, sources, drafts, feedback
+- [ ] Twitter OAuth implementation via Composio
+- [ ] Sphere creation endpoint (free-text description input)
+- [ ] Gemini query generation (5 queries from sphere description)
+- [ ] Query review UI (display + optional editing)
+- [ ] You.com Integration (Search + Live News APIs) - 5 queries × ~10 results each
+- [ ] Source selection UI (checklist of results grouped by query)
+- [ ] Gemini tweet drafting (based on selected sources + feedback)
+- [ ] Draft review UI (approve/edit/reject)
+- [ ] Tweet posting via Composio
+- [ ] Feedback loop storage (drafts, query tweaks, source selections)
 - [ ] Deployment to Render
 
-## Known Issues
-- No code written yet (initial setup phase).
+## Stretch Goals
+- [ ] Reply-to-tweets feature (search for existing tweets to reply to)
+
+## Known Issues & Constraints
+- No code written yet (initial setup and planning phase).
 - Limited time (5.5 hours from 11 AM PT).
-- Minimal frontend experience (will require generation).
+- Team of 4 developers, need to coordinate work.
+- MVP UI: Keep query editing and source filtering simple (checklists, text inputs).
+- Major flow revision: Now creating original tweets from researched content, not replying to existing tweets.

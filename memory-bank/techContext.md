@@ -23,8 +23,9 @@
 - `sqlalchemy` (optional, for SQLite)
 
 ## Development Environment
-- **Conda:** `brander-agent` environment (to be created)
+- **Conda:** `hackenv` environment (Python 3.11.14, created)
 - **OS:** macOS Tahoe (as per system info)
+- **Team:** 4 developers
 
 ## Technical Constraints
 - **Time:** 5.5 hours total coding time.
