@@ -16,7 +16,7 @@ load_dotenv()
 # Check Composio dashboard -> Connected Accounts -> "User ID" column.
 DEFAULT_USER_ID = "pg-test-8e448524-361d-49b6-9176-538e26c37814"
 
-composio = Composio(toolkit_versions={"twitter": "20260204_00"})
+composio = Composio(api_key=os.getenv("COMPOSIO_API_KEY"))
 
 
 def post_tweet(text: str, user_id: str = DEFAULT_USER_ID) -> dict:
