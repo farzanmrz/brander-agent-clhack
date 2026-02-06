@@ -18,10 +18,10 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-cream">
       <Header />
       <main className="max-w-3xl mx-auto px-6 pt-28 pb-12">
-        <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-12">
+        <h1 className="text-4xl md:text-5xl font-bold text-black mb-12">
           What do you want to talk about today?
         </h1>
 
@@ -42,12 +42,12 @@ export default function DashboardPage() {
           Find Topics
         </Button>
 
-        <p className="text-sm text-gray-500 text-center">
+        <p className="text-sm text-gray-600 text-center font-medium">
           We&apos;ll find the trending angles for you
         </p>
 
         <div className="mt-16">
-          <p className="text-sm font-semibold text-gray-700 mb-3">
+          <p className="text-sm font-bold text-black mb-3 uppercase tracking-wide">
             Quick starts
           </p>
           <div className="flex flex-wrap gap-3">
@@ -60,7 +60,7 @@ export default function DashboardPage() {
                     `/dashboard/topics?query=${encodeURIComponent(topic)}`
                   );
                 }}
-                className="bg-white border-2 border-gray-200 px-5 py-2.5 rounded-full text-sm text-gray-700 hover:border-green-500 transition-all duration-150 cursor-pointer"
+                className="bg-white neo-border neo-shadow-sm px-5 py-2.5 rounded-lg text-sm font-bold text-black hover:bg-sky transition-all duration-100 cursor-pointer neo-press-sm"
               >
                 {topic}
               </button>

@@ -19,34 +19,34 @@ export default function PostCard({
 }: PostCardProps) {
   const formattedText = text.replace(
     /(https?:\/\/[^\s]+)/g,
-    '<span class="text-green-600 underline">$1</span>'
+    '<span class="text-black underline decoration-2 underline-offset-2">$1</span>'
   );
 
   return (
     <div
       className={cn(
-        "border-2 p-6 rounded-2xl transition-all duration-150 flex flex-col",
+        "neo-border p-6 rounded-lg transition-all duration-100 flex flex-col",
         selected
-          ? "border-green-600 bg-green-50"
-          : "border-gray-200 bg-white"
+          ? "bg-lime shadow-[4px_4px_0px_var(--color-black)]"
+          : "bg-white neo-shadow"
       )}
     >
-      <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+      <span className="inline-block bg-lavender neo-border rounded-md px-2 py-1 text-xs font-bold text-black uppercase tracking-wide mb-3 self-start">
         {angle}
       </span>
       <p
-        className="text-base leading-relaxed text-gray-900 mb-4 flex-1"
+        className="text-base leading-relaxed text-black mb-4 flex-1"
         dangerouslySetInnerHTML={{ __html: formattedText }}
       />
       <div className="flex items-center justify-between mt-auto">
-        <span className="text-xs text-gray-500">{chars} characters</span>
+        <span className="text-xs font-semibold text-gray-600 bg-gray-100 neo-border rounded px-2 py-0.5">{chars} chars</span>
         <button
           onClick={onSelect}
           className={cn(
-            "px-4 py-2 text-sm font-semibold rounded-xl border-2 transition-all duration-150 cursor-pointer",
+            "px-4 py-2 text-sm font-bold rounded-lg neo-border transition-all duration-100 cursor-pointer neo-press-sm",
             selected
-              ? "border-green-600 bg-green-600 text-white"
-              : "border-green-600 text-green-700 hover:bg-green-600 hover:text-white"
+              ? "bg-black text-white shadow-none"
+              : "bg-white text-black neo-shadow-sm hover:bg-lime"
           )}
         >
           {selected ? "Selected" : "Select"}

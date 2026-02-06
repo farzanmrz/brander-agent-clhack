@@ -9,8 +9,10 @@ interface LoadingStateProps {
 export default function LoadingState({ message = "Finding articles..." }: LoadingStateProps) {
   return (
     <div className="flex flex-col items-center justify-center py-24">
-      <Loader2 className="w-8 h-8 text-green-600 animate-spin mb-4" />
-      <p className="text-base text-gray-600">{message}</p>
+      <div className="bg-lime neo-border rounded-lg p-4 mb-6 animate-pulse">
+        <Loader2 className="w-8 h-8 text-black animate-spin" />
+      </div>
+      <p className="text-lg font-bold text-black">{message}</p>
     </div>
   );
 }

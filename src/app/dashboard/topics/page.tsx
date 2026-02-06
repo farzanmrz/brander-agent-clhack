@@ -81,37 +81,39 @@ function TopicsContent() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-cream">
       <Header />
       <main className="max-w-5xl mx-auto px-6 pt-28 pb-32">
         <button
           onClick={() => router.back()}
-          className="flex items-center gap-1 text-gray-600 hover:text-gray-900 mb-6 transition-all duration-150 cursor-pointer"
+          className="flex items-center gap-1 text-black font-bold mb-6 transition-all duration-100 cursor-pointer hover:underline decoration-2 underline-offset-4"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-5 h-5" strokeWidth={3} />
           <span className="text-sm">Back</span>
         </button>
 
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-black mb-2">
           Pick the angles you want to explore
         </h1>
-        <p className="text-gray-600 mb-8">Results for &ldquo;{query}&rdquo;</p>
+        <p className="text-gray-600 font-medium mb-8">Results for &ldquo;{query}&rdquo;</p>
 
         {loading ? (
           <LoadingState message="Finding topics..." />
         ) : error ? (
-          <div className="rounded-lg border-2 border-red-200 bg-red-50 p-6 text-red-700">
-            <p className="font-semibold mb-2">Could not load topics</p>
+          <div className="rounded-lg neo-border bg-pink p-6 text-black">
+            <p className="font-bold mb-2">Could not load topics</p>
             <p className="text-sm mb-4">{error}</p>
             <Button onClick={fetchTopics} size="sm">
               Retry
             </Button>
           </div>
         ) : topics.length === 0 ? (
-          <p className="text-gray-500">
-            No topics found. Try a different search or go back to refine your
-            description.
-          </p>
+          <div className="bg-white neo-border neo-shadow p-8 rounded-lg">
+            <p className="text-gray-600 font-medium">
+              No topics found. Try a different search or go back to refine your
+              description.
+            </p>
+          </div>
         ) : (
           <div className="grid md:grid-cols-2 gap-4">
             {topics.map((topic) => (
@@ -129,7 +131,7 @@ function TopicsContent() {
       </main>
 
       {!loading && topics.length > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-200 p-4">
+        <div className="fixed bottom-0 left-0 right-0 bg-peach neo-border border-b-0 border-l-0 border-r-0 p-4">
           <div className="max-w-5xl mx-auto">
             <Button
               onClick={handleGenerate}
