@@ -5,5 +5,4 @@ services:
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
-    # Optional: override start command to use Render's PORT (Dockerfile already uses ${PORT})
-    # dockerCommand: leave unset to use Dockerfile CMD
+    healthCheckPath: /api/health
