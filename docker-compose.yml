@@ -1,11 +1,11 @@
-# Backend on 3000, frontend dev server on 3001. Run: docker-compose up
+# Frontend on 3000 (main app), backend on 3001 (API /docs). Run: docker-compose up
 services:
   backend:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
       - PORT=3000
 
@@ -14,9 +14,8 @@ services:
       context: .
       dockerfile: Dockerfile.frontend
     ports:
-      - "3001:3001"
+      - "3000:3001"
     environment:
-      # Next rewrites /api/* to backend; from container use service name
       - API_URL=http://backend:3000
     depends_on:
       - backend

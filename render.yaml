@@ -1,17 +1,9 @@
-# Render blueprint: one web service, backend on $PORT, serves React build from /
+# Render blueprint: one web service built from Dockerfile (backend on $PORT, optional static in ./static)
 services:
   - type: web
     name: brander-agent
-    runtime: python
+    runtime: docker
     plan: free
-
-    buildCommand: |
-      pip install -r requirements.txt
-      if [ -d frontend ] && [ -f frontend/package.json ]; then
-        cd frontend && npm install && npm run build
-        mkdir -p ../static
-        if [ -d build ]; then cp -r build/. ../static; else cp -r dist/. ../static; fi
-        cd ..
-      fi
-
-    startCommand: python -m uvicorn main:app --host 0.0.0.0 --port $PORT
+    dockerfilePath: ./Dockerfile
+    # Optional: override start command to use Render's PORT (Dockerfile already uses ${PORT})
+    # dockerCommand: leave unset to use Dockerfile CMD

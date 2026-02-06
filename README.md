@@ -41,7 +41,7 @@ AI-powered personal branding agent for Twitter/X. Define your brand "spheres" vi
   ```bash
   docker-compose up
   ```
-  Then open http://localhost:3001 for the app and http://localhost:3000 for the API.
+  Then open http://localhost:3000 for the app; the API is at http://localhost:3001 (and /api is proxied from the app).
 - **Docker (backend only):** Build and run the API (and optional pre-built static):
   ```bash
   docker build -t brander-agent . && docker run -p 3000:3000 brander-agent
